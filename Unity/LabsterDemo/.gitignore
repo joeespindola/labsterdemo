@@ -1,0 +1,23 @@
+# UNITY
+Temp/
+Library/
+
+# MONODEVELOP
+ExportedObj/
+obj/
+*.svd
+*.userprefs
+*.pidb
+*.suo
+*.user
+*.unityproj
+*.booproj
+
+# MAC TRASH
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
