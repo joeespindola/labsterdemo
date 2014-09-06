@@ -52,6 +52,9 @@
      <Compile Include="Assets\Scripts\InventoryController.cs" />
      <Compile Include="Assets\Scripts\LevelController.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
+ <Reference Include="Assembly-UnityScript-firstpass">
+ <HintPath>/Users/joe/Desktop/works/Labster/GamePrototype/LabsterDemoApplication/labsterdemo/Unity/LabsterDemo/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+ </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

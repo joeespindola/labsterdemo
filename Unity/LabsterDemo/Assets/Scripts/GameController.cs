@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour {
 	public PlayerController player;
 	public InputController input;
 
-	private string lastSelectedObjectTag;
+	private TagObject lastSelectedObjectTag;
 	private Vector3 lastSelectedWorldPos;
 
 	public enum TagObject {
@@ -45,12 +45,19 @@ public class GameController : MonoBehaviour {
 		Vector3 lastInput = input.GetLastInputPosition();
 
 		if(lastInput != Vector3.zero) {
-			Ray ray = Camera.main.ScreenPointToRay(lastInput);
 
+			Ray ray = Camera.main.ScreenPointToRay(lastInput);
 			RaycastHit hit;
+
 			Physics.Raycast(Camera.main.transform.position, ray.direction, out hit, 1000);
 
-			player.SetTargetPosition(hit.point);
+			string hitTag = hit.collider.gameObject.tag;
+			lastSelectedObjectTag = GameController.ReturnTag(hitTag);
+
+			// SET PLAYER POSITION OF CLICKED ON GROUND
+			if(lastSelectedObjectTag == TagObject.TagGround) {
+				player.SetTargetPosition(hit.point);
+			}
 
 		}
 	}
