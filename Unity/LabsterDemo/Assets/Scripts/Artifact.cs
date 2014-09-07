@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Artifact : MonoBehaviour
 {
+	// ARTIFACT OBJECTS
 	public enum ArtifactObject {
 		ArtifactNull,
 		ArtifactRedKey,
@@ -10,9 +11,8 @@ public class Artifact : MonoBehaviour
 		ArtifactGreenKey
 	}
 
-	public ArtifactObject artifact;
-
-	public Animator artifactAnimator;
+	private ArtifactObject artifactObject;
+	private Animator artifactAnimator;
 
 	void Start() {
 		artifactAnimator = GetComponent<Animator>();
@@ -28,8 +28,12 @@ public class Artifact : MonoBehaviour
 		DestroyObject(gameObject);
 	}
 
+	public void SetArtifactObject(ArtifactObject artifact) {
+		artifactObject = artifact;
+	}
+
 	public ArtifactObject GetArtifactObject() {
-		return artifact;
+		return artifactObject;
 	}
 }
 

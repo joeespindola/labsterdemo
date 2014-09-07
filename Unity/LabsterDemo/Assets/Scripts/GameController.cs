@@ -22,12 +22,14 @@ public class GameController : MonoBehaviour {
 		TagWall,
 		TagArtifact
 	}
-	
 
 	private TagObject lastSelectedObjectTag;
 	private Vector3 lastSelectedWorldPos;
 
 	void Start () {
+
+		// LOAD THE LEVEL
+		level.LoadLevel();
 
 	}
 	
@@ -82,13 +84,10 @@ public class GameController : MonoBehaviour {
 			// GET ARTIFACT OBJECT
 			Artifact artifact = collider.gameObject.GetComponent<Artifact>();
 
-			Debug.Log ("tag");
-
 			// GET ARTIFACT TYPE
 			Artifact.ArtifactObject artifactType = artifact.GetArtifactObject();
 
 			// SET ARTIFACT TO INVENTORY
-
 
 			// SEND MESSAGE TO COLLECTED ARTIFACT.
 			artifact.ArtifactCollected();

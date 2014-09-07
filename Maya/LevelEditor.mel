@@ -1,0 +1,25 @@
+global proc createLevelGridBlockObject(float $x, float $y, float $z, string $type) {
+    select -r gridblock;
+    string $obj[] = `duplicate -rr`;
+    
+    scale -r $x $y $z ;
+    
+    string $parentObject = "root";
+    
+    switch($type) {
+        case "Wall":
+            $parentObject = "Grp_Wall";
+        break;
+        
+    }
+    
+    // parent created object inside parent object
+    select $obj[0];
+    select -add $parentObject;
+    parent;
+    
+    // rename current object to type name
+    rename $obj[0] $type;
+}
+
+createLevelGridBlockObject(10, 2, 0.1, "Wall");
