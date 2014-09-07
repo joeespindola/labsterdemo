@@ -34,6 +34,124 @@ proc PresetWall(float $y, float $z, float $rot) {
 }
 
 
+proc CreateDoor() {
+    select -r door_object;
+    string $obj[] = `duplicate -rr -un`;
+        
+    $parentObject = "Grp_Door";
+    
+    // parent created object inside parent object
+    select $obj[0];
+    select -add $parentObject;
+    parent;
+    
+    // rename current object to type name
+    rename $obj[0] "Door";
+}
+
+proc CreateArtifact() {
+    select -r artifact_object;
+    
+}
+
+// HELPER FUNCTION TO GET OBJECTS TRANSFORM INFORMATION (TRANSLATE, SCALE, ROTATE)
+proc float[] GetObejctTransformInfo(string $obj, string $transform) {
+    float $transfX = `getAttr ($obj+"."+$transform+"X")`;
+    float $transfY = `getAttr ($obj+"."+$transform+"Y")`;
+    float $transfZ = `getAttr ($obj+"."+$transform+"Z")`;
+    
+    // CLAMP FLOAT DECIMALS TO 3 USING THE ROUND OFF FUNCTION
+    float $xyz[] = {roundoff($transfX,3), roundoff($transfY,3), roundoff($transfZ,3)};
+    
+    return $xyz;
+}
+
+
+// HELPER FUNCTION TO ROUND OFF FLOAT VALUES
+global proc float roundoff(float $value,int $precision) {
+    return (trunc($value*`pow 10 $precision`+0.5)/`pow 10 $precision`);
+}
+
+proc ExportLevel() {
+    
+    string $filePath = `textField -q -tx leveled_levelfile`;
+    
+    $fileId = `fopen $filePath "w"` ;  
+    
+    // create level node
+    fprint $fileId "<level>";
+    
+    float $groundScaleX = `getAttr "ground.scaleX"`;
+    float $groundScaleY = `getAttr "ground.scaleY"`;
+    
+    // create ground
+    fprint $fileId ("<ground><scale>80,1,80</scale><position>0,0,0</position></ground>");
+
+    // create walls
+    select Grp_Wall;
+    string $wallNodes[] = `ls -sl -tr -dag`;
+    
+    
+    fprint $fileId ("<walls>");
+    
+    for($wall in $wallNodes) {
+        // IGNORE FIRST
+        if($wall == "Grp_Wall") {
+            continue;
+        }
+        
+        float $scale[] = GetObejctTransformInfo($wall, "scale");
+        float $translate[] = GetObejctTransformInfo($wall, "translate");
+        float $rotate[] = GetObejctTransformInfo($wall, "rotate");
+        
+        fprint $fileId ("<wall>");
+        
+        // position
+        fprint $fileId ("<position>"+$translate[0]+","+$translate[1]+","+$translate[2]+"</position>");
+        // rotation
+        fprint $fileId ("<rotation>"+$rotate[0]+","+$rotate[1]+","+$rotate[2]+"</rotation>");
+        // scale
+        fprint $fileId ("<scale>"+$scale[0]+","+$scale[1]+","+$scale[2]+"</scale>");
+            
+        fprint $fileId ("</wall>");
+    }
+    
+    // create doors
+    select Grp_Door;
+    string $doorNodes[] = `ls -sl -tr -dag`;
+    
+    for($door in $doorNodes) {
+        // IGNORE FIRST
+        if($door == "Grp_Door") {
+            continue;
+        }
+        
+        float $scale[] = GetObejctTransformInfo($wall, "scale");
+        float $translate[] = GetObejctTransformInfo($wall, "translate");
+        float $rotate[] = GetObejctTransformInfo($wall, "rotate");
+        
+        fprint $fileId ("<wall>");
+        
+        // position
+        fprint $fileId ("<position>"+$translate[0]+","+$translate[1]+","+$translate[2]+"</position>");
+        // rotation
+        fprint $fileId ("<rotation>"+$rotate[0]+","+$rotate[1]+","+$rotate[2]+"</rotation>");
+        // scale
+        fprint $fileId ("<scale>"+$scale[0]+","+$scale[1]+","+$scale[2]+"</scale>");
+            
+        fprint $fileId ("</wall>");
+    }
+    
+    fprint $fileId ("</walls>");
+    
+  
+    // end level node
+    fprint $fileId "</level>";
+  
+    // Close File  
+    fclose $fileId ;
+}
+
 global proc LevelEditor() {
     string $level_editor_win = "LEVEL_EDITOR_WIN";
     
@@ -42,15 +160,15 @@ global proc LevelEditor() {
     }
     
     window -title "Labster Game Level Editor"
-            -width 520
+            -width 500
             -height 375
             $level_editor_win;
             
-            columnLayout;
+            columnLayout -rowSpacing 12;
                 rowLayout -nc 6 -cw6 120 70 70 60 70 30;
                     text -label "Create Wall Z/Y";
                     floatField -precision 0 leveled_wallsize_z;
-                    floatField -value 2 -precision 0 leveled_wallsize_y;
+                    floatField -value 1 -precision 0 leveled_wallsize_y;
                     text -label "rotation";
                     floatField -precision 0 leveled_wallsize_rot;
                     button -label "Create" -c "CreateWallForm";
@@ -58,9 +176,26 @@ global proc LevelEditor() {
                 
                 rowLayout -nc 4 -cw4 120 80 80 80 ;
                     text -label "Wall Presets";
-                    button -label "10x Wall" -c "PresetWall(10, 2, 0)";
-                    button -label "4x Wall" -c "PresetWall(4, 2, 0)";
-                    button -label "1x Wall" -c "PresetWall(1, 2, 0)";
+                    button -label "10x Wall" -c "PresetWall(1, 10, 0)";
+                    button -label "4x Wall" -c "PresetWall(1, 4, 0)";
+                    button -label "1x Wall" -c "PresetWall(1, 1, 0)";
+                    
+                setParent ..;
+                
+                rowLayout -nc 2 -cw2 90 90;
+                    button -label "Create Door" -c "CreateDoor";
+                    button -label "Create Artifact" -c "CreateArtifact";
+                    
+                setParent ..;                
+                
+                rowLayout -nc 2 -cw2 80 220;
+                    text -label "Level file";
+                    textField -text "/Users/joe/Desktop/works/Labster/GamePrototype/LabsterDemoApplication/labsterdemo/Unity/LabsterDemo/Assets/Levels/Easy.xml" leveled_levelfile;
+                    
+                setParent ..;
+                
+                button -label "Export level" -c "ExportLevel";
+            
     
     showWindow;
 }

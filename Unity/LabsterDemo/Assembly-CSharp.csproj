@@ -53,6 +53,9 @@
      <Compile Include="Assets\Scripts\InventoryController.cs" />
      <Compile Include="Assets\Scripts\LevelController.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <None Include="Assets\Levels\Easy.xml" />
+     <None Include="Assets\Levels\Hard.xml" />
+     <None Include="Assets\Levels\Medium.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
