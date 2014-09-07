@@ -11,7 +11,7 @@ public class Artifact : MonoBehaviour
 		ArtifactGreenKey
 	}
 
-	private ArtifactObject artifactObject;
+	public ArtifactObject artifactObject;
 	private Animator artifactAnimator;
 
 	void Start() {

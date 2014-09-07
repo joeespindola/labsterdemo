@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour {
 		TagPlayer,
 		TagGround,
 		TagWall,
+		TagDoor,
 		TagArtifact
 	}
 
@@ -110,6 +111,31 @@ public class GameController : MonoBehaviour {
 			break;
 		case "TagArtifact":
 			tagObject = TagObject.TagArtifact;
+			break;
+		}
+		
+		return tagObject;
+	}
+
+	// RETURN STRONG FROM TAG OBJECT
+	public static string GetTagStringFromObject(TagObject tag) {
+		string tagObject = "TagNull";
+
+		switch(tag) {
+		case TagObject.TagPlayer:
+			tagObject = "TagPlayer";
+			break;
+		case TagObject.TagWall:
+			tagObject = "TagWall";
+			break;
+		case TagObject.TagGround:
+			tagObject = "TagGround";
+			break;
+		case TagObject.TagDoor:
+			tagObject = "TagDoor";
+			break;
+		case TagObject.TagArtifact:
+			tagObject = "TagArtifact";
 			break;
 		}
 		

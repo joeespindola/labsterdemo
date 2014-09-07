@@ -89,20 +89,20 @@ proc ExportLevel() {
     $fileId = `fopen $filePath "w"` ;  
     
     // create level node
-    fprint $fileId "<level>";
+    fprint $fileId "<level>\n";
     
     float $groundScaleX = `getAttr "ground.scaleX"`;
     float $groundScaleY = `getAttr "ground.scaleY"`;
     
     // create ground
-    fprint $fileId ("<ground><scale>80,1,80</scale><position>0,0,0</position></ground>");
+    fprint $fileId ("<ground><scale>80,1,80</scale><position>0,0,0</position></ground>\n");
 
     // CREATE WALLS
     select Grp_Wall;
     string $wallNodes[] = `ls -sl -tr -dag`;
     
     
-    fprint $fileId ("<walls>");
+    //fprint $fileId ("<walls>");
     
     for($wall in $wallNodes) {
         // IGNORE FIRST
@@ -118,14 +118,14 @@ proc ExportLevel() {
         fprint $fileId ("<position>"+$translate[0]+","+$translate[1]+","+$translate[2]+"</position>");
         fprint $fileId ("<rotation>"+$rotate[0]+","+$rotate[1]+","+$rotate[2]+"</rotation>");
         fprint $fileId ("<scale>"+$scale[0]+","+$scale[1]+","+$scale[2]+"</scale>");
-        fprint $fileId ("</wall>");
+        fprint $fileId ("</wall>\n");
     }
     
     // CREATE DOORS
     select Grp_Door;
     string $doorNodes[] = `ls -sl -tr -dag`;
     
-    fprint $fileId ("<doors>");
+    //fprint $fileId ("<doors>");
     
     for($door in $doorNodes) {
         // IGNORE FIRST
@@ -144,16 +144,16 @@ proc ExportLevel() {
         fprint $fileId ("<position>"+$translate[0]+","+$translate[1]+","+$translate[2]+"</position>");
         fprint $fileId ("<rotation>"+$rotate[0]+","+$rotate[1]+","+$rotate[2]+"</rotation>");
         fprint $fileId ("<scale>"+$scale[0]+","+$scale[1]+","+$scale[2]+"</scale>");
-        fprint $fileId ("</door>");
+        fprint $fileId ("</door>\n");
     }
     
-    fprint $fileId ("</doors>");
+    //fprint $fileId ("</doors>");
     
      // CREATE ARTIFACTS
     select Grp_Artifact;
     string $artifactNodes[] = `ls -sl -tr -dag`;
     
-    fprint $fileId ("<artifacts>");
+    //fprint $fileId ("<artifacts>");
     
     for($artifact in $artifactNodes) {
         // IGNORE FIRST
@@ -172,10 +172,10 @@ proc ExportLevel() {
         fprint $fileId ("<position>"+$translate[0]+","+$translate[1]+","+$translate[2]+"</position>");
         fprint $fileId ("<rotation>"+$rotate[0]+","+$rotate[1]+","+$rotate[2]+"</rotation>");
         fprint $fileId ("<scale>"+$scale[0]+","+$scale[1]+","+$scale[2]+"</scale>");
-        fprint $fileId ("</artifact>");
+        fprint $fileId ("</artifact>\n");
     }
     
-    fprint $fileId ("</artifacts>");
+    //fprint $fileId ("</artifacts>");
     
   
     // end level node
