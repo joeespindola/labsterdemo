@@ -1,17 +1,15 @@
-global proc createLevelGridBlockObject(float $x, float $y, float $z, string $type) {
-    select -r gridblock;
-    string $obj[] = `duplicate -rr`;
+proc CreateWallObject(float $y, float $z, float $rot) {
     
-    scale -r $x $y $z ;
-    
-    string $parentObject = "root";
-    
-    switch($type) {
-        case "Wall":
-            $parentObject = "Grp_Wall";
-        break;
+    select -r wall_object;
+    string $obj[] = `duplicate -rr -un`;
         
-    }
+    float $wall_size = `getAttr cc_attributes.wallSize`;
+        
+    scale -r $wall_size $y $z ;
+    
+    setAttr ($obj[0]+".rotateY") $rot;
+    
+    $parentObject = "Grp_Wall";
     
     // parent created object inside parent object
     select $obj[0];
@@ -19,7 +17,52 @@ global proc createLevelGridBlockObject(float $x, float $y, float $z, string $typ
     parent;
     
     // rename current object to type name
-    rename $obj[0] $type;
+    rename $obj[0] "Wall";
+
 }
 
-createLevelGridBlockObject(10, 2, 0.1, "Wall");
+proc CreateWallForm() {
+    float $y = `floatField -q -v leveled_wallsize_y`;
+    float $z = `floatField -q -v leveled_wallsize_z`;
+    float $rot = `floatField -q -v leveled_wallsize_rot`;
+    
+    CreateWallObject($y, $z, $rot);
+}
+
+proc PresetWall(float $y, float $z, float $rot) {
+    CreateWallObject($y, $z, $rot);
+}
+
+
+global proc LevelEditor() {
+    string $level_editor_win = "LEVEL_EDITOR_WIN";
+    
+    if(`window -exists $level_editor_win`) {
+        deleteUI -window $level_editor_win;
+    }
+    
+    window -title "Labster Game Level Editor"
+            -width 520
+            -height 375
+            $level_editor_win;
+            
+            columnLayout;
+                rowLayout -nc 6 -cw6 120 70 70 60 70 30;
+                    text -label "Create Wall Z/Y";
+                    floatField -precision 0 leveled_wallsize_z;
+                    floatField -value 2 -precision 0 leveled_wallsize_y;
+                    text -label "rotation";
+                    floatField -precision 0 leveled_wallsize_rot;
+                    button -label "Create" -c "CreateWallForm";
+                setParent ..;
+                
+                rowLayout -nc 4 -cw4 120 80 80 80 ;
+                    text -label "Wall Presets";
+                    button -label "10x Wall" -c "PresetWall(10, 2, 0)";
+                    button -label "4x Wall" -c "PresetWall(4, 2, 0)";
+                    button -label "1x Wall" -c "PresetWall(1, 2, 0)";
+    
+    showWindow;
+}
+
+LevelEditor();

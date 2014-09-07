@@ -1,13 +1,15 @@
 fileFormatVersion: 2
-guid: 2eda53e9012244f43af24cc4c9dce900
+guid: ccd2fc34696434d109d899f50c2e8757
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: pCube1
+    100000: wall_object
+    100002: //RootNode
+    400000: wall_object
+    400002: //RootNode
+    2300000: wall_object
+    3300000: wall_object
+    4300000: wall_object
     9500000: //RootNode
   materials:
     importMaterials: 1
