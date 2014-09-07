@@ -20,7 +20,7 @@ public class Artifact : MonoBehaviour
 
 	// SET ANIMATOR BOOL
 	public void ArtifactCollected() {
-		artifactAnimator.SetBool ("collected_artifact", true);
+		artifactAnimator.SetBool ("artifact_collected", true);
 	}
 
 	// ANIMATION CALLBACK

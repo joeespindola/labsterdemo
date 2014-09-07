@@ -9,5 +9,5 @@
 <wall><position>0,0,5</position><rotation>0,90,0</rotation><scale>0.3,2,10</scale></wall>
 <wall><position>-4.999,0,-0.999</position><rotation>0,0,0</rotation><scale>0.3,2,8</scale></wall>
 <door><type>Red</type><position>-4.999,0,5</position><rotation>0,0,0</rotation><scale>0.3,2,2</scale></door>
-<artifact><type>Red</type><position>-1.999,0.55,3</position><rotation>0,0,0</rotation><scale>0.5,0.5,0.5</scale></artifact>
+<artifact><type>Red</type><position>-1.999,0,3</position><rotation>0,0,0</rotation><scale>1,1,1</scale></artifact>
 </level>
