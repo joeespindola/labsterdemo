@@ -51,7 +51,17 @@ proc CreateDoor() {
 
 proc CreateArtifact() {
     select -r artifact_object;
+    string $obj[] = `duplicate -rr -un`;
+        
+    $parentObject = "Grp_Artifact";
     
+    // parent created object inside parent object
+    select $obj[0];
+    select -add $parentObject;
+    parent;
+    
+    // rename current object to type name
+    rename $obj[0] "Artifact";
 }
 
 // HELPER FUNCTION TO GET OBJECTS TRANSFORM INFORMATION (TRANSLATE, SCALE, ROTATE)
@@ -87,7 +97,7 @@ proc ExportLevel() {
     // create ground
     fprint $fileId ("<ground><scale>80,1,80</scale><position>0,0,0</position></ground>");
 
-    // create walls
+    // CREATE WALLS
     select Grp_Wall;
     string $wallNodes[] = `ls -sl -tr -dag`;
     
@@ -105,20 +115,17 @@ proc ExportLevel() {
         float $rotate[] = GetObejctTransformInfo($wall, "rotate");
         
         fprint $fileId ("<wall>");
-        
-        // position
         fprint $fileId ("<position>"+$translate[0]+","+$translate[1]+","+$translate[2]+"</position>");
-        // rotation
         fprint $fileId ("<rotation>"+$rotate[0]+","+$rotate[1]+","+$rotate[2]+"</rotation>");
-        // scale
         fprint $fileId ("<scale>"+$scale[0]+","+$scale[1]+","+$scale[2]+"</scale>");
-            
         fprint $fileId ("</wall>");
     }
     
-    // create doors
+    // CREATE DOORS
     select Grp_Door;
     string $doorNodes[] = `ls -sl -tr -dag`;
+    
+    fprint $fileId ("<doors>");
     
     for($door in $doorNodes) {
         // IGNORE FIRST
@@ -126,23 +133,49 @@ proc ExportLevel() {
             continue;
         }
         
-        float $scale[] = GetObejctTransformInfo($wall, "scale");
-        float $translate[] = GetObejctTransformInfo($wall, "translate");
-        float $rotate[] = GetObejctTransformInfo($wall, "rotate");
+        float $scale[] = GetObejctTransformInfo($door, "scale");
+        float $translate[] = GetObejctTransformInfo($door, "translate");
+        float $rotate[] = GetObejctTransformInfo($door, "rotate");
         
-        fprint $fileId ("<wall>");
+        string $doorKey = `getAttr -as ($door+".doorKey")`;
         
-        // position
+        fprint $fileId ("<door>");
+        fprint $fileId ("<type>"+$doorKey+"</type>");
         fprint $fileId ("<position>"+$translate[0]+","+$translate[1]+","+$translate[2]+"</position>");
-        // rotation
         fprint $fileId ("<rotation>"+$rotate[0]+","+$rotate[1]+","+$rotate[2]+"</rotation>");
-        // scale
         fprint $fileId ("<scale>"+$scale[0]+","+$scale[1]+","+$scale[2]+"</scale>");
-            
-        fprint $fileId ("</wall>");
+        fprint $fileId ("</door>");
     }
     
-    fprint $fileId ("</walls>");
+    fprint $fileId ("</doors>");
+    
+     // CREATE ARTIFACTS
+    select Grp_Artifact;
+    string $artifactNodes[] = `ls -sl -tr -dag`;
+    
+    fprint $fileId ("<artifacts>");
+    
+    for($artifact in $artifactNodes) {
+        // IGNORE FIRST
+        if($artifact == "Grp_Artifact") {
+            continue;
+        }
+        
+        float $scale[] = GetObejctTransformInfo($artifact, "scale");
+        float $translate[] = GetObejctTransformInfo($artifact, "translate");
+        float $rotate[] = GetObejctTransformInfo($artifact, "rotate");
+        
+        string $artifactType = `getAttr -as ($artifact+".artifactType")`;
+        
+        fprint $fileId ("<artifact>");
+        fprint $fileId ("<type>"+$artifactType+"</type>");
+        fprint $fileId ("<position>"+$translate[0]+","+$translate[1]+","+$translate[2]+"</position>");
+        fprint $fileId ("<rotation>"+$rotate[0]+","+$rotate[1]+","+$rotate[2]+"</rotation>");
+        fprint $fileId ("<scale>"+$scale[0]+","+$scale[1]+","+$scale[2]+"</scale>");
+        fprint $fileId ("</artifact>");
+    }
+    
+    fprint $fileId ("</artifacts>");
     
   
     // end level node
