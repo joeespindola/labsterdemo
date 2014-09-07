@@ -12,8 +12,20 @@ public class Artifact : MonoBehaviour
 
 	public ArtifactObject artifact;
 
-	void Start() {
+	public Animator artifactAnimator;
 
+	void Start() {
+		artifactAnimator = GetComponent<Animator>();
+	}
+
+	// SET ANIMATOR BOOL
+	public void ArtifactCollected() {
+		artifactAnimator.SetBool ("collected_artifact", true);
+	}
+
+	// ANIMATION CALLBACK
+	public void DestroyArtifact() {
+		DestroyObject(gameObject);
 	}
 
 	public ArtifactObject GetArtifactObject() {

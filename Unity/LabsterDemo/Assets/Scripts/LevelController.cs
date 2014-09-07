@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+* 	LEVEL CONTROLLER IS RESPONSIBLE FOR
+* 
+*	- LOADING LEVELS FROM XML
+* 	- CREATING GAME OBJECTS LOADED LEVELS
+* 	- SAVING AND LOADING GAME FILES
+*/
 public class LevelController : MonoBehaviour {
+	public GameObject levelRootObject;
 
-	// Use this for initialization
 	void Start () {
-	
+		
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }

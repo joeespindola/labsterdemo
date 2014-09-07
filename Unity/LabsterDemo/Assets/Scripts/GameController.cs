@@ -13,6 +13,7 @@ using System.Collections;
 public class GameController : MonoBehaviour {
 	public PlayerController player;
 	public InputController input;
+	public LevelController level;
 
 	public enum TagObject {
 		TagNull,
@@ -78,7 +79,19 @@ public class GameController : MonoBehaviour {
 
 		// PLAYER COLLIDED WITH ARTIFACT
 		if(tagObject == TagObject.TagArtifact) {
+			// GET ARTIFACT OBJECT
+			Artifact artifact = collider.gameObject.GetComponent<Artifact>();
 
+			Debug.Log ("tag");
+
+			// GET ARTIFACT TYPE
+			Artifact.ArtifactObject artifactType = artifact.GetArtifactObject();
+
+			// SET ARTIFACT TO INVENTORY
+
+
+			// SEND MESSAGE TO COLLECTED ARTIFACT.
+			artifact.ArtifactCollected();
 		}
 	}
 
