@@ -2,27 +2,29 @@
 using System.Collections;
 
 /*
-* GAME CONTROLLER IS RESPONSIBLE FOR
-*	- UPDATING CONTROLLERS
-* 	- SETTING PLAYER MOVEMENT TARGETS BASED ON RAYCAST FROM INPUT
+* 	GAME CONTROLLER IS RESPONSIBLE FOR
+* 
+*	- UPDATING CONTROLLERS IN ORDER
+* 	- SET PLAYER MOVEMENT BASED ON INPUT
+* 	- HANDLE COLLISIONS
+* 	- IMPLEMENT GAME LOGIC
 *	- INTERFACE INTERACTION
 */
-
 public class GameController : MonoBehaviour {
 	public PlayerController player;
 	public InputController input;
-
-	private TagObject lastSelectedObjectTag;
-	private Vector3 lastSelectedWorldPos;
 
 	public enum TagObject {
 		TagNull,
 		TagPlayer,
 		TagGround,
 		TagWall,
-		TagObject
+		TagArtifact
 	}
 	
+
+	private TagObject lastSelectedObjectTag;
+	private Vector3 lastSelectedWorldPos;
 
 	void Start () {
 
@@ -33,36 +35,55 @@ public class GameController : MonoBehaviour {
 		// UPDATE INPUT
 		input.Tick();
 
-		// CHECK IF PLAYER HAS ACTION
-		CheckForAction();
+		// CHECK IF PLAYER HAS INPUT AND CHECK ACTION
+		CheckForActionInput();
 
 		// UPDATE PLAYER
 		player.Tick();
 
 	}
 
-	private void CheckForAction() {
+	private void CheckForActionInput() {
 		Vector3 lastInput = input.GetLastInputPosition();
 
+		// HAS PLAYER INPUT EXECUTE ACTION
 		if(lastInput != Vector3.zero) {
 
+			// RAYCAST FORM CAMERA
 			Ray ray = Camera.main.ScreenPointToRay(lastInput);
 			RaycastHit hit;
 
+			// RAYCAST TO POSITION
 			Physics.Raycast(Camera.main.transform.position, ray.direction, out hit, 1000);
 
+			// GET TAG
 			string hitTag = hit.collider.gameObject.tag;
-			lastSelectedObjectTag = GameController.ReturnTag(hitTag);
+			lastSelectedObjectTag = GameController.GetTagObjectFromString(hitTag);
 
-			// SET PLAYER POSITION OF CLICKED ON GROUND
-			if(lastSelectedObjectTag == TagObject.TagGround) {
+			// SET PLAYER POSITION UNLESS CLICKED ON A WALL
+			if(lastSelectedObjectTag != TagObject.TagWall) {
 				player.SetTargetPosition(hit.point);
 			}
 
 		}
 	}
 
-	public static TagObject ReturnTag(string tag) {
+	public void PlayerHasCollisions(Collider collider) {
+		string tag = collider.gameObject.tag;
+
+		TagObject tagObject = GetTagObjectFromString(tag);
+
+		// STOP PLAYER
+		player.SetTargetPosition(Vector3.zero);
+
+		// PLAYER COLLIDED WITH ARTIFACT
+		if(tagObject == TagObject.TagArtifact) {
+
+		}
+	}
+
+	// CONVERT STRING TO TAG OBJECT
+	public static TagObject GetTagObjectFromString(string tag) {
 		TagObject tagObject= TagObject.TagNull;
 		
 		switch(tag) {
@@ -75,8 +96,8 @@ public class GameController : MonoBehaviour {
 		case "TagWall":
 			tagObject = TagObject.TagWall;
 			break;
-		case "TagObject":
-			tagObject = TagObject.TagPlayer;
+		case "TagArtifact":
+			tagObject = TagObject.TagArtifact;
 			break;
 		}
 		

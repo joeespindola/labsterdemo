@@ -1,12 +1,19 @@
 using UnityEngine;
 using System.Collections;
 
-// PLAYER CLASS SIMPLY MOVES GAMEOBJECT TRANSFORM AROUND BASED ON TARGET
+/*
+* 	PLAYER CONTROLLER IS RESPONSIBLE FOR
+* 
+*	- MOVING THE GAME OBJECT TRANSFORM BASED ON A TARGET
+* 	- SENDING COLLISIONS TRIGGERS TO GAME CONTROLLER
+*/
 public class PlayerController : MonoBehaviour
 {
 	public float moveSpeed = 3.0f;
 	public float gravity = 20.0f;
 	public float targetHitDistance = 2.0f;
+
+	public GameController gameController;
 	
 	private CharacterController playerCharacterController;
 	private Rigidbody playerRigidBody;
@@ -27,22 +34,34 @@ public class PlayerController : MonoBehaviour
 		playerDirection = Vector3.zero;
 		targetPosition = Vector3.zero;
 	}
-	
-	public void Init() {
-		
-	}
-	
+
+	// SET TARGET POSITION
 	public void SetTargetPosition(Vector3 position) {
-		targetPosition = position;
-		lastPlayerDirection = targetPosition;
+		// IF VECTOR3 ZERO STOP PLAYER
+		if(position == Vector3.zero) {
+			targetPosition = transform.position;
+			lastPlayerDirection = targetPosition;
+		}
+		else {
+			targetPosition = position;
+			lastPlayerDirection = targetPosition;
+		}
 	}
-	
+
+	// GET TARGET POSITION
 	public Vector3 GetTargetPosition() {
 		return targetPosition;
 	}
 	
 	public void Tick() {
-		
+
+		// MOVE PLAYER
+		Move();
+
+	}
+
+	private void Move() {
+
 		if (targetPosition.magnitude > 0f) {
 			// MOVE TORWARDS TARGET
 			playerDirection = targetPosition - transform.position;
@@ -66,12 +85,17 @@ public class PlayerController : MonoBehaviour
 		playerDirection *= moveSpeed * Time.deltaTime;
 		
 		playerDirection.y = -gravity * Time.deltaTime;
-
+		
 		if(playerDirection.magnitude > 0) playerLookAt.LookAt(transform.position + lastPlayerDirection);
-	
+		
 		playerCharacterController.Move(playerDirection);
 
 	}
-	
+
+	// COLLISION TRIGGER FROM PLAYER DELEGATES COLLISION TO GAME CONTROLLER
+	void OnTriggerEnter(Collider other) {
+		gameController.PlayerHasCollisions(other);
+	}
+
 }
 
