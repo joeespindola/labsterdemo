@@ -643,3 +643,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryBgTexture: {fileID: 2800000, guid: d87e287a0d2854029b7b4d1ad550adb3, type: 3}
+  inventoryRedKeyTexture: {fileID: 2800000, guid: eac71b1f4269347de9a8e9b92e6572fd,
+    type: 3}
+  inventoryGreenKeyTexture: {fileID: 2800000, guid: 58e8ffd4f0a23476d85d173f276c6015,
+    type: 3}
+  inventoryBlueKeyTexture: {fileID: 2800000, guid: 6b546b41ff7e54fda914dda81b1eaf94,
+    type: 3}

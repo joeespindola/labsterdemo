@@ -20,12 +20,12 @@ AnimationClip:
         value: {x: -0, y: .100000001, z: 0}
         inSlope: {x: 0, y: 1.7832756, z: 0}
         outSlope: {x: 0, y: 1.7832756, z: 0}
-        tangentMode: 1073741824
+        tangentMode: 678428688
       - time: 1
         value: {x: 0, y: 1.88327563, z: 0}
         inSlope: {x: 0, y: 1.7832756, z: 0}
         outSlope: {x: 0, y: 1.7832756, z: 0}
-        tangentMode: 0
+        tangentMode: 3145779
       m_PreInfinity: 2
       m_PostInfinity: 2
     path: artifact_object
@@ -42,12 +42,12 @@ AnimationClip:
         value: {x: 1, y: 1, z: 1}
         inSlope: {x: -2.99999976, y: -2.99999976, z: -2.99999976}
         outSlope: {x: -2.99999976, y: -2.99999976, z: -2.99999976}
-        tangentMode: 0
+        tangentMode: 678428688
       - time: 1
         value: {x: 0, y: 0, z: 0}
         inSlope: {x: -5.99999952, y: -5.99999952, z: -5.99999952}
         outSlope: {x: -5.99999952, y: -5.99999952, z: -5.99999952}
-        tangentMode: 4456498
+        tangentMode: 671105637
       m_PreInfinity: 2
       m_PostInfinity: 2
     path: artifact_object
@@ -62,8 +62,13 @@ AnimationClip:
         tangentMode: 10
       - time: .166666672
         value: 0
-        inSlope: -2.39999986
-        outSlope: -2.39999986
+        inSlope: -1.19999993
+        outSlope: -1.19999993
+        tangentMode: 10
+      - time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -81,8 +86,13 @@ AnimationClip:
         tangentMode: 10
       - time: .166666672
         value: 0
-        inSlope: -6
-        outSlope: -6
+        inSlope: -3
+        outSlope: -3
+        tangentMode: 10
+      - time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -100,8 +110,13 @@ AnimationClip:
         tangentMode: 10
       - time: .166666672
         value: 0
-        inSlope: -2.39999986
-        outSlope: -2.39999986
+        inSlope: -1.19999993
+        outSlope: -1.19999993
+        tangentMode: 10
+      - time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -305,8 +320,13 @@ AnimationClip:
         tangentMode: 10
       - time: .166666672
         value: 0
-        inSlope: -2.39999986
-        outSlope: -2.39999986
+        inSlope: -1.19999993
+        outSlope: -1.19999993
+        tangentMode: 10
+      - time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -324,8 +344,13 @@ AnimationClip:
         tangentMode: 10
       - time: .166666672
         value: 0
-        inSlope: -6
-        outSlope: -6
+        inSlope: -3
+        outSlope: -3
+        tangentMode: 10
+      - time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -343,8 +368,13 @@ AnimationClip:
         tangentMode: 10
       - time: .166666672
         value: 0
-        inSlope: -2.39999986
-        outSlope: -2.39999986
+        inSlope: -1.19999993
+        outSlope: -1.19999993
+        tangentMode: 10
+      - time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -355,7 +385,7 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_Events:
   - time: 1
-    functionName: DestroyArtifact
+    functionName: ArtifactAnimationCallback
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

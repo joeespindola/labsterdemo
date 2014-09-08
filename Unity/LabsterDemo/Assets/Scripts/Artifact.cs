@@ -26,18 +26,20 @@ public class Artifact : MonoBehaviour
 
 	// SET ANIMATOR BOOL
 	public void ArtifactCollected(GameObject controller) {
-		isArtifactColleted = true;
+		// STORE GAME CONTROLLER TO SEND MESSAGE LATTER
 		gameController = controller;
+
 		artifactAnimator.SetBool ("artifact_collected", true);
+
+		isArtifactColleted = true;
+
 	}
 
 	// ANIMATION CALLBACK
-	public void DestroyArtifact() {
+	public void ArtifactAnimationCallback() {
 		// CALLBACK GAME CONTROLLER TO ADD ARTIFACT TO INVENTORY
-		gameController.SendMessage("AddArtifact", artifactObject);
+		gameController.SendMessage("AddArtifact", this);
 
-		// DESTROY ARTIFAT GAME OBJECT
-		DestroyObject(gameObject);
 	}
 
 	public void SetArtifactObject(ArtifactObject artifact) {

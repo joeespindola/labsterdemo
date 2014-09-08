@@ -40,12 +40,8 @@ public class GameController : MonoBehaviour {
 
 	private TagObject lastSelectedObjectTag;
 	private Vector3 lastSelectedWorldPos;
-
-	private List<ArtifactObject> playerArtifactObjectList;
-
+	
 	void Start () {
-
-		playerArtifactObjectList = new List<ArtifactObject>();
 
 		// LOAD THE LEVEL
 		level.LoadLevel();
@@ -111,9 +107,6 @@ public class GameController : MonoBehaviour {
 				// GET ARTIFACT TYPE
 				ArtifactObject artifactType = artifact.GetArtifactObject();
 
-				// SET ARTIFACT TO INVENTORY
-				playerArtifactObjectList.Add(artifactType);
-
 				// SEND MESSAGE TO COLLECTED ARTIFACT.
 				artifact.ArtifactCollected(gameObject);
 			}
@@ -125,21 +118,17 @@ public class GameController : MonoBehaviour {
 			Door door = collider.gameObject.GetComponent<Door>();
 
 			// CHECK IF PLAYER HAS ARTIFACT ON OBJECT LIST
-			foreach(ArtifactObject artifactObject in playerArtifactObjectList) {
-
-				if(door.GetNeededArtifact() == artifactObject) {
-					// PLAYER HAS DOOR ARTIFACT
-
-					door.OpenDoor();
-				}
-
+			if(inventory.HasArtifactObject(door.GetNeededArtifact())) {
+				// PLAYER HAS DOOR ARTIFACT
+				door.OpenDoor();
 			}
+
 		}
 	}
 
 	// ADD ARTIFACT DO PLAYER INVENTORY (CALLED AFTER ANIMATION ENDED)
 	public void AddArtifact(object artifact) {
-		ArtifactObject artifactObject = (ArtifactObject)artifact;
+		Artifact artifactObject = (Artifact)artifact;
 
 		inventory.AddArtifact(artifactObject);
 	}
