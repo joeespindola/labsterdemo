@@ -22,19 +22,23 @@ public class InventoryController : MonoBehaviour {
 
 	public bool HasArtifactObject(ArtifactObject artifactObject) {
 		foreach(Artifact obj in artifactIventoryList) {
+
+			// HAS ARTIFACT
 			if(obj.GetArtifactObject() == artifactObject) {
-				// HAS ARTIFACT
 				return true;
 			}
+
 		}
 
 		return false;
 	}
 
 	void OnGUI() {
-		GUI.DrawTexture(new Rect(10, 10, 236, 90), inventoryBgTexture);
+		Vector2 inventoryOffsetPosition =  new Vector2(Screen.width-(250), Screen.height-(105));
 
-		Vector2 offsetInventory = new Vector2(22, 48);
+		GUI.DrawTexture(new Rect(10+inventoryOffsetPosition.x, 10+inventoryOffsetPosition.y, 236, 90), inventoryBgTexture);
+
+		Vector2 offsetInventory = new Vector2(22+inventoryOffsetPosition.x, 48+inventoryOffsetPosition.y);
 
 		float xDist = 57.0f;
 		float xPos = 0.0f;

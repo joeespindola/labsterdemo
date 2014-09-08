@@ -8,9 +8,13 @@ using System.Collections;
 * 	- ANIMATING DOOR OBJECT
 */
 public class Door : MonoBehaviour {
+	public int id;
 
 	public ArtifactObject artifactKeyNeeded;
 	private Animator doorAnimator;
+
+	private bool isOpened = false;
+	private bool wrapDoor = false;
 
 	void Start() {
 		doorAnimator = GetComponent<Animator>();
@@ -24,8 +28,20 @@ public class Door : MonoBehaviour {
 		return artifactKeyNeeded;
 	}
 
+	// RETURN IF DOOR IS OPENED
+	public bool IsOpened() {
+		return isOpened;
+	}
+
 	// OPEN DOOR
 	public void OpenDoor() {
-		doorAnimator.SetBool ("door_opened", true);
+		isOpened = true;
+		doorAnimator.SetBool("door_opened", isOpened);
+		doorAnimator.SetBool("wrap_door", wrapDoor);
+	}
+
+	// WARP DOOR
+	public void WarpDoor() {
+		wrapDoor = true;
 	}
 }

@@ -38,8 +38,12 @@ public class GameController : MonoBehaviour {
 	public LevelController level;
 	public InventoryController inventory;
 
+	public Camera camera;
+
 	private TagObject lastSelectedObjectTag;
 	private Vector3 lastSelectedWorldPos;
+
+	private bool guiInteraction = false;
 	
 	void Start () {
 
@@ -71,19 +75,21 @@ public class GameController : MonoBehaviour {
 			Ray ray = Camera.main.ScreenPointToRay(lastInput);
 			RaycastHit hit;
 
-			// RAYCAST TO POSITION
-			Physics.Raycast(Camera.main.transform.position, ray.direction, out hit, 1000);
+			if(Input.GetMouseButtonDown (0) && GUIUtility.hotControl == 0) {
+				// RAYCAST TO POSITION
+				Physics.Raycast(Camera.main.transform.position, ray.direction, out hit, 1000);
 
-			// GET TAG
-			string hitTag = hit.collider.gameObject.tag;
-			lastSelectedObjectTag = GameController.GetTagObjectFromString(hitTag);
+				// GET TAG
+				string hitTag = hit.collider.gameObject.tag;
+				lastSelectedObjectTag = GameController.GetTagObjectFromString(hitTag);
 
-			// SET PLAYER POSITION UNLESS CLICKED ON A WALL
-			if(lastSelectedObjectTag != TagObject.TagWall) {
-				Vector3 hitPoint = hit.point;
-				hitPoint.y = 0f;
+				// SET PLAYER POSITION UNLESS CLICKED ON A WALL
+				if(lastSelectedObjectTag != TagObject.TagWall && !guiInteraction) {
+					Vector3 hitPoint = hit.point;
+					hitPoint.y = 0f;
 
-				player.SetTargetPosition(hitPoint);
+					player.SetTargetPosition(hitPoint);
+				}
 			}
 
 		}
@@ -131,6 +137,27 @@ public class GameController : MonoBehaviour {
 		Artifact artifactObject = (Artifact)artifact;
 
 		inventory.AddArtifact(artifactObject);
+	}
+
+	// PLAYER GUI INTERACTION
+	public void OnGUI() {
+		if (GUI.Button(new Rect(10, 20, 110, 30), "Save Game")) {
+			level.SaveGame();
+
+
+			guiInteraction = true;
+		}
+
+		else if (GUI.Button(new Rect(10, 55, 110, 30), "Load Game")) {
+			level.LoadGame();
+
+
+			guiInteraction = true;
+		}
+
+		else {
+			guiInteraction = false;
+		}
 	}
 
 	// CONVERT STRING TO TAG OBJECT

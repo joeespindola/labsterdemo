@@ -7,8 +7,9 @@ using System.Collections;
 *	- STORING ARTIFACT TYPE
 * 	- ANIMATING ARTIFACT OBJECT
 */
-public class Artifact : MonoBehaviour
-{
+public class Artifact : MonoBehaviour {
+	public int id;
+
 	private GameObject gameController;
 
 	public ArtifactObject artifactObject;

@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
 		playerCharacterController = gameObject.GetComponent<CharacterController>();
 		playerRigidBody = gameObject.GetComponent<Rigidbody>();
 		
-		playerRigidBody.freezeRotation = true;
+		//playerRigidBody.freezeRotation = true;
 		
 		playerDirection = Vector3.zero;
 		targetPosition = Vector3.zero;
@@ -60,6 +60,13 @@ public class PlayerController : MonoBehaviour
 
 	}
 
+	public void WarpTo(Vector3 position) {
+		transform.position = position;
+
+		targetPosition = Vector3.zero;
+		playerDirection = Vector3.zero;
+	}
+
 	private void Move() {
 
 		if (targetPosition.magnitude > 0f) {
@@ -86,7 +93,7 @@ public class PlayerController : MonoBehaviour
 		
 		playerDirection.y = -gravity * Time.deltaTime;
 		
-		if(playerDirection.magnitude > 0) playerLookAt.LookAt(transform.position + (lastPlayerDirection*10));
+		if(playerDirection.magnitude > 0) playerLookAt.LookAt(transform.position + (lastPlayerDirection));
 		
 		playerCharacterController.Move(playerDirection);
 

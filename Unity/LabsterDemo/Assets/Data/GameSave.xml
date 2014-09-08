@@ -1,0 +1,18 @@
+<save>
+  <player>
+    <position>-9.145,1.01,6.245</position>
+    <rotation>0,304.424,0</rotation>
+  </player>
+  <doors>
+    <door id="0">True</door>
+    <door id="1">False</door>
+    <door id="2">False</door>
+    <artifact id="0">True</artifact>
+    <artifact id="1">False</artifact>
+    <artifact id="2">False</artifact>
+  </doors>
+  <camera>
+    <position>-4.195677,5.009994,2.853183</position>
+    <rotation>33.69,304.424,0</rotation>
+  </camera>
+</save>

@@ -14,6 +14,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
+  - m_Name: wrap_door
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 3
     m_Name: Base Layer
@@ -46,6 +52,26 @@ Transition:
   m_Solo: 0
   m_Mute: 0
   m_CanTransitionToSelf: 0
+--- !u!1101 &110111890
+Transition:
+  serializedVersion: 2
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_SrcState: {fileID: 110236589}
+  m_DstState: {fileID: 110298402}
+  m_TransitionDuration: .25
+  m_TransitionOffset: 0
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: wrap_door
+    m_EventTreshold: 0
+    m_ExitTime: .75
+  m_Atomic: 1
+  m_Solo: 0
+  m_Mute: 0
+  m_CanTransitionToSelf: 0
 --- !u!1101 &110112507
 Transition:
   serializedVersion: 2
@@ -66,26 +92,6 @@ Transition:
   m_Solo: 0
   m_Mute: 0
   m_CanTransitionToSelf: 0
---- !u!1101 &110184585
-Transition:
-  serializedVersion: 2
-  m_ObjectHideFlags: 3
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_SrcState: {fileID: 110200000}
-  m_DstState: {fileID: 110236589}
-  m_TransitionDuration: .25
-  m_TransitionOffset: 0
-  m_Conditions:
-  - m_ConditionMode: 2
-    m_ConditionEvent: door_opened
-    m_EventTreshold: 0
-    m_ExitTime: .75
-  m_Atomic: 1
-  m_Solo: 0
-  m_Mute: 0
-  m_CanTransitionToSelf: 0
 --- !u!1102 &110200000
 State:
   m_ObjectHideFlags: 3
@@ -97,7 +103,7 @@ State:
   m_Motions:
   - {fileID: 7400000, guid: d6e59803473e3482b954515893ba700f, type: 2}
   m_ParentStateMachine: {fileID: 110700000}
-  m_Position: {x: 0, y: 120, z: 0}
+  m_Position: {x: -180, y: 72, z: 0}
   m_IKOnFeet: 0
   m_Mirror: 0
   m_Tag: 
@@ -112,7 +118,22 @@ State:
   m_Motions:
   - {fileID: 7400000, guid: d5a6389ca7f034cde9f94e8647edea87, type: 2}
   m_ParentStateMachine: {fileID: 110700000}
-  m_Position: {x: -12, y: 12, z: 0}
+  m_Position: {x: -24, y: 0, z: 0}
+  m_IKOnFeet: 0
+  m_Mirror: 0
+  m_Tag: 
+--- !u!1102 &110298402
+State:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: WrapDoorAnimation
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Motions:
+  - {fileID: 7400000, guid: 87490e9bfc6da4d2e8367719b0442637, type: 2}
+  m_ParentStateMachine: {fileID: 110700000}
+  m_Position: {x: 192, y: 72, z: 0}
   m_IKOnFeet: 0
   m_Mirror: 0
   m_Tag: 
@@ -127,17 +148,21 @@ StateMachine:
   m_States:
   - {fileID: 110200000}
   - {fileID: 110236589}
+  - {fileID: 110298402}
   m_ChildStateMachine: []
   m_ChildStateMachinePosition: []
   m_OrderedTransitions:
     data:
+      first: {fileID: 110298402}
+      second: []
+    data:
       first: {fileID: 110236589}
       second:
       - {fileID: 110112507}
+      - {fileID: 110111890}
     data:
       first: {fileID: 110200000}
-      second:
-      - {fileID: 110184585}
+      second: []
     data:
       first: {fileID: 0}
       second: []
@@ -152,5 +177,5 @@ StateMachine:
       second:
       - {fileID: 110100000}
   m_MotionSetCount: 1
-  m_AnyStatePosition: {x: 72, y: -48, z: 0}
+  m_AnyStatePosition: {x: 0, y: -60, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
