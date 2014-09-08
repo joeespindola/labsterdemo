@@ -96,11 +96,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 79931354}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 2.32283592, y: 1.01326656, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!1 &80033949
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04826929086ef40d8a1ec4ac5e40aff0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 2
   gravity: 20
   targetHitDistance: .200000003
   gameController: {fileID: 1642669831}
@@ -193,7 +193,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1138250765}
-  m_Father: {fileID: 1642669832}
+  m_Father: {fileID: 0}
   m_RootOrder: 2
 --- !u!54 &80033955
 Rigidbody:
@@ -599,6 +599,5 @@ Transform:
   m_Children:
   - {fileID: 1448885632}
   - {fileID: 1284283015}
-  - {fileID: 80033954}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3

@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
 		
 		playerDirection.y = -gravity * Time.deltaTime;
 		
-		if(playerDirection.magnitude > 0) playerLookAt.LookAt(transform.position + lastPlayerDirection);
+		if(playerDirection.magnitude > 0) playerLookAt.LookAt(transform.position + (lastPlayerDirection*10));
 		
 		playerCharacterController.Move(playerDirection);
 

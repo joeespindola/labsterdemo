@@ -14,12 +14,19 @@ public class Artifact : MonoBehaviour
 	public ArtifactObject artifactObject;
 	private Animator artifactAnimator;
 
+	private bool isArtifactColleted = false;
+
 	void Start() {
 		artifactAnimator = GetComponent<Animator>();
 	}
 
+	public bool IsArtifactCollected() {
+		return isArtifactColleted;
+	}
+
 	// SET ANIMATOR BOOL
 	public void ArtifactCollected() {
+		isArtifactColleted = true;
 		artifactAnimator.SetBool ("artifact_collected", true);
 	}
 

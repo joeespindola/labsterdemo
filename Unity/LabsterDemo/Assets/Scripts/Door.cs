@@ -4,9 +4,12 @@ using System.Collections;
 public class Door : MonoBehaviour {
 
 	public Artifact.ArtifactObject artifactNeeded;
+	private Animator doorAnimator;
 
 	public void SetArtifactNeeded(Artifact.ArtifactObject artifact) {
 		artifactNeeded = artifact;
+
+		doorAnimator = GetComponent<Animator>();
 	}
 
 	public Artifact.ArtifactObject GetNeededArtifact() {
@@ -14,6 +17,7 @@ public class Door : MonoBehaviour {
 	}
 
 	public void OpenDoor() {
-		DestroyObject(gameObject);
+		doorAnimator.SetBool ("door_opened", true);
+		Destroy(GetComponent<BoxCollider>());
 	}
 }

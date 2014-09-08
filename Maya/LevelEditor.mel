@@ -5,7 +5,7 @@ proc CreateWallObject(float $y, float $z, float $rot) {
         
     float $wall_size = `getAttr cc_attributes.wallSize`;
         
-    scale -r $wall_size $y $z ;
+    scale -r 1 1 $z ;
     
     setAttr ($obj[0]+".rotateY") $rot;
     

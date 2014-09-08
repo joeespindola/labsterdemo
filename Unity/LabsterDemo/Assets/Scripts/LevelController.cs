@@ -53,6 +53,8 @@ public class LevelController : MonoBehaviour {
 					obj.tag = GameController.GetTagStringFromObject(GameController.TagObject.TagDoor);
 					Door doorObj = obj.GetComponent<Door>();
 
+
+
 					// SET DOOR TYPE
 					foreach (XmlNode transformItens in transformcontent) {
 						if(transformItens.Name == "type") {
@@ -60,12 +62,15 @@ public class LevelController : MonoBehaviour {
 							
 							if(typeValue == "Red") {
 								doorObj.SetArtifactNeeded(Artifact.ArtifactObject.ArtifactRedKey);
+								obj.transform.GetChild(0).gameObject.renderer.material.color = Color.red;
 							}
 							if(typeValue == "Green") {
 								doorObj.SetArtifactNeeded(Artifact.ArtifactObject.ArtifactGreenKey);
+								obj.transform.GetChild(0).gameObject.renderer.material.color = Color.green;
 							}
 							if(typeValue == "Blue") {
 								doorObj.SetArtifactNeeded(Artifact.ArtifactObject.ArtifactBlueKey);
+								obj.transform.GetChild(0).gameObject.renderer.material.color = Color.blue;
 							}
 						}
 					}
@@ -82,12 +87,15 @@ public class LevelController : MonoBehaviour {
 
 							if(typeValue == "Red") {
 								artifactObj.SetArtifactObject(Artifact.ArtifactObject.ArtifactRedKey);
+								artifactObj.transform.GetChild(0).gameObject.renderer.material.color = Color.red;
 							}
 							if(typeValue == "Green") {
 								artifactObj.SetArtifactObject(Artifact.ArtifactObject.ArtifactGreenKey);
+								artifactObj.transform.GetChild(0).gameObject.renderer.material.color = Color.green;
 							}
 							if(typeValue == "Blue") {
 								artifactObj.SetArtifactObject(Artifact.ArtifactObject.ArtifactBlueKey);
+								artifactObj.transform.GetChild(0).gameObject.renderer.material.color = Color.blue;
 							}
 						}
 					}
@@ -96,7 +104,6 @@ public class LevelController : MonoBehaviour {
 
 				// SET OBJECT TRANSFORM VALUES FROM XML
 				CreateTransformObject(transformcontent, obj);
-
 
 			}
 

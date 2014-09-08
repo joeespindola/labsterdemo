@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /*
 * 	GAME CONTROLLER IS RESPONSIBLE FOR
@@ -27,7 +28,11 @@ public class GameController : MonoBehaviour {
 	private TagObject lastSelectedObjectTag;
 	private Vector3 lastSelectedWorldPos;
 
+	private List<Artifact.ArtifactObject> playerArtifactObjectList;
+
 	void Start () {
+
+		playerArtifactObjectList = new List<Artifact.ArtifactObject>();
 
 		// LOAD THE LEVEL
 		level.LoadLevel();
@@ -85,13 +90,40 @@ public class GameController : MonoBehaviour {
 			// GET ARTIFACT OBJECT
 			Artifact artifact = collider.gameObject.GetComponent<Artifact>();
 
-			// GET ARTIFACT TYPE
-			Artifact.ArtifactObject artifactType = artifact.GetArtifactObject();
+			// MAKE SURE ARTIFACT IS COLLECTED ONLY ONCE
+			if(artifact.IsArtifactCollected() == false) {
+				// GET ARTIFACT TYPE
+				Artifact.ArtifactObject artifactType = artifact.GetArtifactObject();
 
-			// SET ARTIFACT TO INVENTORY
+				// SET ARTIFACT TO INVENTORY
+				playerArtifactObjectList.Add(artifactType);
 
-			// SEND MESSAGE TO COLLECTED ARTIFACT.
-			artifact.ArtifactCollected();
+				// SEND MESSAGE TO COLLECTED ARTIFACT.
+				artifact.ArtifactCollected();
+			}
+		}
+
+		// PLAYER COLLIDED WITH DOOR
+		if(tagObject == TagObject.TagDoor) {
+			// GET DOOR OBJECT
+			Door door = collider.gameObject.GetComponent<Door>();
+
+			Debug.Log ("Door collide "+door);
+
+			// CHECK IF PLAYER HAS ARTIFACT ON OBJECT LIST
+			foreach(Artifact.ArtifactObject artifactObject in playerArtifactObjectList) {
+
+				if(door.GetNeededArtifact() == artifactObject) {
+					// PLAYER HAS DOOR ARTIFACT
+
+					door.OpenDoor();
+					//Debug.Log ("OPEN DOOR");
+
+				}
+
+			}
+
+			// GET DOOR TYPE
 		}
 	}
 
@@ -111,6 +143,9 @@ public class GameController : MonoBehaviour {
 			break;
 		case "TagArtifact":
 			tagObject = TagObject.TagArtifact;
+			break;
+		case "TagDoor":
+			tagObject = TagObject.TagDoor;
 			break;
 		}
 		
