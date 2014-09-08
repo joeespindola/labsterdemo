@@ -60,6 +60,18 @@ public class PlayerController : MonoBehaviour
 
 	}
 
+	public void ResetPlayerPosition() {
+		transform.position = new Vector3(0f, 1f, 0f);
+		
+		Quaternion playerRotationQuat = transform.rotation;
+		playerRotationQuat.eulerAngles = new Vector3(0f, 0f, 0f);
+		
+		transform.rotation = playerRotationQuat;
+
+		playerDirection = Vector3.zero;
+		lastPlayerDirection = Vector3.zero;
+	}
+
 	public void WarpTo(Vector3 position) {
 		transform.position = position;
 

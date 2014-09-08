@@ -40,6 +40,20 @@ public class LevelController : MonoBehaviour {
 		// CREATE ARTIFACT LIST
 		gameLevelArtifactList = new List<Artifact>();
 
+		// RESET PLAYER POSITION
+		gameController.player.ResetPlayerPosition();
+
+		// CLEAR PLAYER INVENTORY
+		gameController.inventory.ClearInventory();
+
+		// RESET CAMERA
+		gameController.camera.transform.position =  new Vector3(0f, 5f, -6f);
+
+		Quaternion cameraRotationQuat = gameController.camera.transform.rotation;
+		cameraRotationQuat.eulerAngles = new Vector3(33.69004f, 0f, 0f);
+		
+		gameController.camera.transform.rotation = cameraRotationQuat;
+
 		// RESET IDS
 		int artifactIdCount = 0;
 		int doorIdCount = 0;
@@ -187,6 +201,11 @@ public class LevelController : MonoBehaviour {
 		foreach (Transform child in levelRootObject.transform) {
 			GameObject.Destroy(child.gameObject);
 		}
+	}
+
+	public void RestartLevel() {
+		ClearLevel ();
+		LoadLevel ();
 	}
 
 	// SAVE GAME

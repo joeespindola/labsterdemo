@@ -142,21 +142,16 @@ public class GameController : MonoBehaviour {
 	public void OnGUI() {
 		if (GUI.Button(new Rect(10, 20, 110, 30), "Save Game")) {
 			level.SaveGame();
-
-
-			guiInteraction = true;
 		}
 
 		else if (GUI.Button(new Rect(10, 55, 110, 30), "Load Game")) {
 			level.LoadGame();
-
-
-			guiInteraction = true;
 		}
 
-		else {
-			guiInteraction = false;
+		else if (GUI.Button(new Rect(10, 91, 110, 30), "Restart Game")) {
+			level.RestartLevel();
 		}
+
 	}
 
 	// CONVERT STRING TO TAG OBJECT
