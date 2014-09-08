@@ -114,7 +114,7 @@ public class GameController : MonoBehaviour {
 				ArtifactObject artifactType = artifact.GetArtifactObject();
 
 				// SEND MESSAGE TO COLLECTED ARTIFACT.
-				artifact.ArtifactCollected(gameObject);
+				artifact.ArtifactCollected();
 			}
 		}
 

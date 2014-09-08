@@ -9,6 +9,7 @@ TagManager:
   - TagArtifact
   - TagDoor
   - TagPlayer
+  - TagGameController
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX

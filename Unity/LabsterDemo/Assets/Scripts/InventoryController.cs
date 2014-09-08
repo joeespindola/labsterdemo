@@ -33,6 +33,10 @@ public class InventoryController : MonoBehaviour {
 		return false;
 	}
 
+	public void ClearInventory() {
+		artifactIventoryList.Clear();
+	}
+
 	void OnGUI() {
 		Vector2 inventoryOffsetPosition =  new Vector2(Screen.width-(250), Screen.height-(105));
 

@@ -10,7 +10,7 @@ using System.Collections;
 public class Artifact : MonoBehaviour {
 	public int id;
 
-	private GameObject gameController;
+	public GameController gameController;
 
 	public ArtifactObject artifactObject;
 	private Animator artifactAnimator;
@@ -19,6 +19,7 @@ public class Artifact : MonoBehaviour {
 
 	void Start() {
 		artifactAnimator = GetComponent<Animator>();
+		gameController = GameObject.FindGameObjectWithTag("TagGameController").GetComponent<GameController>();
 	}
 
 	public bool IsArtifactCollected() {
@@ -26,10 +27,7 @@ public class Artifact : MonoBehaviour {
 	}
 
 	// SET ANIMATOR BOOL
-	public void ArtifactCollected(GameObject controller) {
-		// STORE GAME CONTROLLER TO SEND MESSAGE LATTER
-		gameController = controller;
-
+	public void ArtifactCollected() {
 		artifactAnimator.SetBool ("artifact_collected", true);
 
 		isArtifactColleted = true;
@@ -49,6 +47,21 @@ public class Artifact : MonoBehaviour {
 
 	public ArtifactObject GetArtifactObject() {
 		return artifactObject;
+	}
+
+	public void WarpArtifact() {
+		if(artifactAnimator == null) {
+			artifactAnimator = GetComponent<Animator>();
+			gameController = GameObject.FindGameObjectWithTag("TagGameController").GetComponent<GameController>();
+
+		}
+
+		isArtifactColleted = true;
+
+		artifactAnimator.SetBool ("warp_collected", true);
+
+		// SEND MESSAGE TO GAME CONTROLLER TO COLLECT ARTIFACT
+		ArtifactAnimationCallback();
 	}
 }
 

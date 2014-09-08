@@ -11,7 +11,7 @@ public class Door : MonoBehaviour {
 	public int id;
 
 	public ArtifactObject artifactKeyNeeded;
-	private Animator doorAnimator;
+	public Animator doorAnimator;
 
 	private bool isOpened = false;
 	private bool wrapDoor = false;
@@ -37,11 +37,17 @@ public class Door : MonoBehaviour {
 	public void OpenDoor() {
 		isOpened = true;
 		doorAnimator.SetBool("door_opened", isOpened);
-		doorAnimator.SetBool("wrap_door", wrapDoor);
 	}
 
 	// WARP DOOR
 	public void WarpDoor() {
 		wrapDoor = true;
+		isOpened = true;
+
+		if(doorAnimator == null) {
+			doorAnimator = GetComponent<Animator>();
+		}
+
+		doorAnimator.SetBool("wrap_door", wrapDoor);
 	}
 }
