@@ -17,7 +17,7 @@ public class Artifact : MonoBehaviour {
 
 	private bool isArtifactColleted = false;
 
-	void Start() {
+	public void Create() {
 		artifactAnimator = GetComponent<Animator>();
 		gameController = GameObject.FindGameObjectWithTag("TagGameController").GetComponent<GameController>();
 	}

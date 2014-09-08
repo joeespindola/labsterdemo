@@ -64,9 +64,11 @@ public class LevelController : MonoBehaviour {
 				}
 				if(levelNode.Name == "door")
 				{
+					// CREATE DOOR OBJECT
 					obj.tag = GameController.GetTagStringFromObject(TagObject.TagDoor);
 					Door doorObj = obj.GetComponent<Door>();
 					doorObj.id = doorIdCount;
+					doorObj.Create();
 
 					gameLevelDoorList.Add(doorObj);
 
@@ -94,9 +96,11 @@ public class LevelController : MonoBehaviour {
 				}
 				if(levelNode.Name == "artifact")
 				{
+					// CREATE ARTIFACT OBJECT
 					obj.tag = GameController.GetTagStringFromObject(TagObject.TagArtifact);
 					Artifact artifactObj = obj.GetComponent<Artifact>();
 					artifactObj.id = artifactIdCount;
+					artifactObj.Create();
 
 					gameLevelArtifactList.Add(artifactObj);
 
@@ -282,8 +286,6 @@ public class LevelController : MonoBehaviour {
 		if(File.Exists(filepath))
 		{
 			xmlDoc.Load(filepath);
-			
-			XmlElement elmRoot = xmlDoc.DocumentElement;
 
 			// DESTROY LEVEL CHILDRENS
 			ClearLevel();
@@ -364,9 +366,7 @@ public class LevelController : MonoBehaviour {
 					string artifactStateValue = artifactInfoNode.InnerText;
 					
 					int id = int.Parse( artifactInfoNode.Attributes["id"].Value );
-
-					Debug.Log ("WARP ARTIFACT = "+artifactStateValue);
-
+				
 					// CHECK IF DOOR ID IS THE SAME
 					foreach(Artifact artifact in gameLevelArtifactList) {
 						if(artifact.id == id && artifactStateValue == "True") {

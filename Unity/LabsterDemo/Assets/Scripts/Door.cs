@@ -16,7 +16,7 @@ public class Door : MonoBehaviour {
 	private bool isOpened = false;
 	private bool wrapDoor = false;
 
-	void Start() {
+	public void Create() {
 		doorAnimator = GetComponent<Animator>();
 	}
 
@@ -44,9 +44,6 @@ public class Door : MonoBehaviour {
 		wrapDoor = true;
 		isOpened = true;
 
-		if(doorAnimator == null) {
-			doorAnimator = GetComponent<Animator>();
-		}
 
 		doorAnimator.SetBool("wrap_door", wrapDoor);
 	}

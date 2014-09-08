@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
 		playerCharacterController = gameObject.GetComponent<CharacterController>();
 		playerRigidBody = gameObject.GetComponent<Rigidbody>();
 		
-		//playerRigidBody.freezeRotation = true;
+		playerRigidBody.freezeRotation = true;
 		
 		playerDirection = Vector3.zero;
 		targetPosition = Vector3.zero;
@@ -96,6 +96,15 @@ public class PlayerController : MonoBehaviour
 		if(playerDirection.magnitude > 0) playerLookAt.LookAt(transform.position + (lastPlayerDirection));
 		
 		playerCharacterController.Move(playerDirection);
+
+		// AVOID WEIRD ROTATIONS WHEN INTERFACTING WITH OTHER PHYSICS OBJECTS
+		Quaternion rotQuat = transform.rotation;
+		Vector3 rotQuatEulers = rotQuat.eulerAngles;
+
+		rotQuatEulers.x = 0f;
+		rotQuat.eulerAngles = rotQuatEulers;
+
+		transform.rotation = rotQuat;
 
 	}
 

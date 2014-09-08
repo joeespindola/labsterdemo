@@ -110,11 +110,10 @@ public class GameController : MonoBehaviour {
 
 			// MAKE SURE ARTIFACT IS COLLECTED ONLY ONCE
 			if(artifact.IsArtifactCollected() == false) {
-				// GET ARTIFACT TYPE
-				ArtifactObject artifactType = artifact.GetArtifactObject();
 
 				// SEND MESSAGE TO COLLECTED ARTIFACT.
 				artifact.ArtifactCollected();
+
 			}
 		}
 
