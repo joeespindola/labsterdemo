@@ -1,15 +1,15 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+* 	ARTIFACT IS RESPONSIBLE FOR
+* 
+*	- STORING ARTIFACT TYPE
+* 	- ANIMATING ARTIFACT OBJECT
+*/
 public class Artifact : MonoBehaviour
 {
-	// ARTIFACT OBJECTS
-	public enum ArtifactObject {
-		ArtifactNull,
-		ArtifactRedKey,
-		ArtifactBlueKey,
-		ArtifactGreenKey
-	}
+	private GameObject gameController;
 
 	public ArtifactObject artifactObject;
 	private Animator artifactAnimator;
@@ -25,13 +25,18 @@ public class Artifact : MonoBehaviour
 	}
 
 	// SET ANIMATOR BOOL
-	public void ArtifactCollected() {
+	public void ArtifactCollected(GameObject controller) {
 		isArtifactColleted = true;
+		gameController = controller;
 		artifactAnimator.SetBool ("artifact_collected", true);
 	}
 
 	// ANIMATION CALLBACK
 	public void DestroyArtifact() {
+		// CALLBACK GAME CONTROLLER TO ADD ARTIFACT TO INVENTORY
+		gameController.SendMessage("AddArtifact", artifactObject);
+
+		// DESTROY ARTIFAT GAME OBJECT
 		DestroyObject(gameObject);
 	}
 

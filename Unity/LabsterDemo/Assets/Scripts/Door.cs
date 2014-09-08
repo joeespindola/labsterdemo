@@ -1,23 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+* 	DOOR IS RESPONSIBLE FOR
+* 
+*	- STORING DOOR TYPE
+* 	- ANIMATING DOOR OBJECT
+*/
 public class Door : MonoBehaviour {
 
-	public Artifact.ArtifactObject artifactNeeded;
+	public ArtifactObject artifactKeyNeeded;
 	private Animator doorAnimator;
 
-	public void SetArtifactNeeded(Artifact.ArtifactObject artifact) {
-		artifactNeeded = artifact;
-
+	void Start() {
 		doorAnimator = GetComponent<Animator>();
 	}
 
-	public Artifact.ArtifactObject GetNeededArtifact() {
-		return artifactNeeded;
+	public void SetArtifactNeeded(ArtifactObject artifact) {
+		artifactKeyNeeded = artifact;
 	}
 
+	public ArtifactObject GetNeededArtifact() {
+		return artifactKeyNeeded;
+	}
+
+	// OPEN DOOR
 	public void OpenDoor() {
 		doorAnimator.SetBool ("door_opened", true);
-		Destroy(GetComponent<BoxCollider>());
 	}
 }

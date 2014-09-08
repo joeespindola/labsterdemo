@@ -10,29 +10,42 @@ using System.Collections.Generic;
 * 	- HANDLE COLLISIONS
 * 	- IMPLEMENT GAME LOGIC
 *	- INTERFACE INTERACTION
+*	- SET GLOBAL ENUMS
 */
+
+// MAKE ENUMS ACCESSIBLE THROUGHOUT CODE
+// ARTIFACT OBJECTS
+public enum ArtifactObject {
+	ArtifactNull,
+	ArtifactRedKey,
+	ArtifactBlueKey,
+	ArtifactGreenKey
+}
+
+// TAGS
+public enum TagObject {
+	TagNull,
+	TagPlayer,
+	TagGround,
+	TagWall,
+	TagDoor,
+	TagArtifact
+}
+
 public class GameController : MonoBehaviour {
 	public PlayerController player;
 	public InputController input;
 	public LevelController level;
-
-	public enum TagObject {
-		TagNull,
-		TagPlayer,
-		TagGround,
-		TagWall,
-		TagDoor,
-		TagArtifact
-	}
+	public InventoryController inventory;
 
 	private TagObject lastSelectedObjectTag;
 	private Vector3 lastSelectedWorldPos;
 
-	private List<Artifact.ArtifactObject> playerArtifactObjectList;
+	private List<ArtifactObject> playerArtifactObjectList;
 
 	void Start () {
 
-		playerArtifactObjectList = new List<Artifact.ArtifactObject>();
+		playerArtifactObjectList = new List<ArtifactObject>();
 
 		// LOAD THE LEVEL
 		level.LoadLevel();
@@ -71,7 +84,10 @@ public class GameController : MonoBehaviour {
 
 			// SET PLAYER POSITION UNLESS CLICKED ON A WALL
 			if(lastSelectedObjectTag != TagObject.TagWall) {
-				player.SetTargetPosition(hit.point);
+				Vector3 hitPoint = hit.point;
+				hitPoint.y = 0f;
+
+				player.SetTargetPosition(hitPoint);
 			}
 
 		}
@@ -93,13 +109,13 @@ public class GameController : MonoBehaviour {
 			// MAKE SURE ARTIFACT IS COLLECTED ONLY ONCE
 			if(artifact.IsArtifactCollected() == false) {
 				// GET ARTIFACT TYPE
-				Artifact.ArtifactObject artifactType = artifact.GetArtifactObject();
+				ArtifactObject artifactType = artifact.GetArtifactObject();
 
 				// SET ARTIFACT TO INVENTORY
 				playerArtifactObjectList.Add(artifactType);
 
 				// SEND MESSAGE TO COLLECTED ARTIFACT.
-				artifact.ArtifactCollected();
+				artifact.ArtifactCollected(gameObject);
 			}
 		}
 
@@ -108,23 +124,24 @@ public class GameController : MonoBehaviour {
 			// GET DOOR OBJECT
 			Door door = collider.gameObject.GetComponent<Door>();
 
-			Debug.Log ("Door collide "+door);
-
 			// CHECK IF PLAYER HAS ARTIFACT ON OBJECT LIST
-			foreach(Artifact.ArtifactObject artifactObject in playerArtifactObjectList) {
+			foreach(ArtifactObject artifactObject in playerArtifactObjectList) {
 
 				if(door.GetNeededArtifact() == artifactObject) {
 					// PLAYER HAS DOOR ARTIFACT
 
 					door.OpenDoor();
-					//Debug.Log ("OPEN DOOR");
-
 				}
 
 			}
-
-			// GET DOOR TYPE
 		}
+	}
+
+	// ADD ARTIFACT DO PLAYER INVENTORY (CALLED AFTER ANIMATION ENDED)
+	public void AddArtifact(object artifact) {
+		ArtifactObject artifactObject = (ArtifactObject)artifact;
+
+		inventory.AddArtifact(artifactObject);
 	}
 
 	// CONVERT STRING TO TAG OBJECT

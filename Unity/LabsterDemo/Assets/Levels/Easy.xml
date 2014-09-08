@@ -18,7 +18,7 @@
 <door><type>Red</type><position>-4.999,0,5</position><rotation>0,0,0</rotation><scale>1,1.7,2</scale></door>
 <door><type>Green</type><position>-14.999,0,5</position><rotation>0,0,0</rotation><scale>1,1.7,2</scale></door>
 <door><type>Blue</type><position>-24.999,0,11</position><rotation>0,0,0</rotation><scale>1,1.7,2</scale></door>
-<artifact><type>Red</type><position>-1.999,0,2</position><rotation>0,0,0</rotation><scale>1,1,1</scale></artifact>
+<artifact><type>Red</type><position>-1.999,0,-1.999</position><rotation>0,0,0</rotation><scale>1,1,1</scale></artifact>
 <artifact><type>Green</type><position>-7.499,0,7.5</position><rotation>0,0,0</rotation><scale>1,1,1</scale></artifact>
-<artifact><type>Blue</type><position>-19.999,0,10.5</position><rotation>0,0,0</rotation><scale>1,1,1</scale></artifact>
+<artifact><type>Blue</type><position>-22.999,0,13.5</position><rotation>0,0,0</rotation><scale>1,1,1</scale></artifact>
 </level>

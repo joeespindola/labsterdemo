@@ -16,13 +16,11 @@ public class LevelController : MonoBehaviour {
 	public GameObject levelRootObject;
 	public TextAsset LevelAsset;
 
-	List<Dictionary<string,string>> levelObjects = new List<Dictionary<string,string>>();
-	Dictionary<string,string> obj;
-
 	void Start () {
 
 	}
 
+	// LOAD LEVEL XML
 	public void LoadLevel() {
 
 		XmlDocument xmlDoc = new XmlDocument(); 
@@ -42,18 +40,16 @@ public class LevelController : MonoBehaviour {
 				// SET TAGS AND SPECIFIC GAME ATTRIBUTES
 				if(levelNode.Name == "ground")
 				{
-					obj.tag = GameController.GetTagStringFromObject(GameController.TagObject.TagGround);
+					obj.tag = GameController.GetTagStringFromObject(TagObject.TagGround);
 				}
 				if(levelNode.Name == "wall")
 				{
-					obj.tag = GameController.GetTagStringFromObject(GameController.TagObject.TagWall);
+					obj.tag = GameController.GetTagStringFromObject(TagObject.TagWall);
 				}
 				if(levelNode.Name == "door")
 				{
-					obj.tag = GameController.GetTagStringFromObject(GameController.TagObject.TagDoor);
+					obj.tag = GameController.GetTagStringFromObject(TagObject.TagDoor);
 					Door doorObj = obj.GetComponent<Door>();
-
-
 
 					// SET DOOR TYPE
 					foreach (XmlNode transformItens in transformcontent) {
@@ -61,15 +57,15 @@ public class LevelController : MonoBehaviour {
 							string typeValue = transformItens.InnerText;
 							
 							if(typeValue == "Red") {
-								doorObj.SetArtifactNeeded(Artifact.ArtifactObject.ArtifactRedKey);
+								doorObj.SetArtifactNeeded(ArtifactObject.ArtifactRedKey);
 								obj.transform.GetChild(0).gameObject.renderer.material.color = Color.red;
 							}
 							if(typeValue == "Green") {
-								doorObj.SetArtifactNeeded(Artifact.ArtifactObject.ArtifactGreenKey);
+								doorObj.SetArtifactNeeded(ArtifactObject.ArtifactGreenKey);
 								obj.transform.GetChild(0).gameObject.renderer.material.color = Color.green;
 							}
 							if(typeValue == "Blue") {
-								doorObj.SetArtifactNeeded(Artifact.ArtifactObject.ArtifactBlueKey);
+								doorObj.SetArtifactNeeded(ArtifactObject.ArtifactBlueKey);
 								obj.transform.GetChild(0).gameObject.renderer.material.color = Color.blue;
 							}
 						}
@@ -77,7 +73,7 @@ public class LevelController : MonoBehaviour {
 				}
 				if(levelNode.Name == "artifact")
 				{
-					obj.tag = GameController.GetTagStringFromObject(GameController.TagObject.TagArtifact);
+					obj.tag = GameController.GetTagStringFromObject(TagObject.TagArtifact);
 					Artifact artifactObj = obj.GetComponent<Artifact>();
 
 					// SET ARTIFACT TYPE
@@ -86,15 +82,15 @@ public class LevelController : MonoBehaviour {
 							string typeValue = transformItens.InnerText;
 
 							if(typeValue == "Red") {
-								artifactObj.SetArtifactObject(Artifact.ArtifactObject.ArtifactRedKey);
+								artifactObj.SetArtifactObject(ArtifactObject.ArtifactRedKey);
 								artifactObj.transform.GetChild(0).gameObject.renderer.material.color = Color.red;
 							}
 							if(typeValue == "Green") {
-								artifactObj.SetArtifactObject(Artifact.ArtifactObject.ArtifactGreenKey);
+								artifactObj.SetArtifactObject(ArtifactObject.ArtifactGreenKey);
 								artifactObj.transform.GetChild(0).gameObject.renderer.material.color = Color.green;
 							}
 							if(typeValue == "Blue") {
-								artifactObj.SetArtifactObject(Artifact.ArtifactObject.ArtifactBlueKey);
+								artifactObj.SetArtifactObject(ArtifactObject.ArtifactBlueKey);
 								artifactObj.transform.GetChild(0).gameObject.renderer.material.color = Color.blue;
 							}
 						}
