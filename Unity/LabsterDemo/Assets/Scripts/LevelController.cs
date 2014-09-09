@@ -186,6 +186,8 @@ public class LevelController : MonoBehaviour {
 		float x = float.Parse(vectors[0]);
 		float y = float.Parse(vectors[1]);
 		float z = float.Parse(vectors[2]);
+
+
 		
 		return new Vector3(x,y,z);
 	}
@@ -215,6 +217,7 @@ public class LevelController : MonoBehaviour {
 
 		// PARENT AND POSITION, SCALE, ROTATE OBJECT
 		obj.transform.parent = levelRootObject.transform;
+
 		obj.transform.position = objPosition;
 		
 		Quaternion groundRotationQuat = obj.transform.rotation;
@@ -240,7 +243,12 @@ public class LevelController : MonoBehaviour {
 
 	// SAVE GAME
 	public void SaveGame() {
+
 		string filepath = Directory.GetCurrentDirectory() + @"/GameSave.xml";
+
+		if(Application.platform == RuntimePlatform.Android) {
+			filepath = Application.persistentDataPath + @"/GameSave.xml";
+		}
 
 		XmlDocument xmlDoc = new XmlDocument();
 
@@ -328,6 +336,10 @@ public class LevelController : MonoBehaviour {
 		//string filepath = Application.dataPath + @"/GameSave.xml";
 
 		string filepath = Directory.GetCurrentDirectory() + @"/GameSave.xml";
+
+		if(Application.platform == RuntimePlatform.Android) {
+			filepath = Application.persistentDataPath + @"/GameSave.xml";
+		}
 
 		XmlDocument xmlDoc = new XmlDocument();
 

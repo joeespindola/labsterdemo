@@ -424,9 +424,9 @@ Light:
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
-    m_Resolution: 3
+    m_Resolution: 2
     m_Strength: .741999984
-    m_Bias: .0680000037
+    m_Bias: 0
     m_Softness: 4
     m_SoftnessFade: 1
   m_Cookie: {fileID: 0}
