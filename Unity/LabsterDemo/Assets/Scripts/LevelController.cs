@@ -137,6 +137,10 @@ public class LevelController : MonoBehaviour {
 								artifactObj.SetArtifactObject(ArtifactObject.ArtifactBlueKey);
 								artifactObj.transform.GetChild(0).gameObject.renderer.material.color = Color.blue;
 							}
+							if(typeValue == "White") {
+								artifactObj.SetArtifactObject(ArtifactObject.ArtifactWhiteKey);
+								artifactObj.transform.GetChild(0).gameObject.renderer.material.color = Color.white;
+							}
 						}
 					}
 

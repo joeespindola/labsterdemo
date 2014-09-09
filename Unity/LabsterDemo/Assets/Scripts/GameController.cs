@@ -81,18 +81,11 @@ public class GameController : MonoBehaviour {
 				// RAYCAST TO POSITION
 				Physics.Raycast(Camera.main.transform.position, ray.direction, out hit, 2000);
 
-				// GET TAG
-				string hitTag = hit.collider.gameObject.tag;
-				Debug.Log(hitTag);
-				//lastSelectedObjectTag = GameController.GetTagObjectFromString(hitTag);
+				Vector3 hitPoint = hit.point;
+				hitPoint.y = 0f;
 
-				// SET PLAYER POSITION UNLESS CLICKED ON A WALL
-				//if(lastSelectedObjectTag != TagObject.TagWall && !guiInteraction) {
-					Vector3 hitPoint = hit.point;
-					hitPoint.y = 0f;
-
-					player.SetTargetPosition(hitPoint);
-				//}
+				// SET PLAYER NEW TARGET TO MOVE
+				player.SetTargetPosition(hitPoint);
 			}
 
 		}
@@ -146,6 +139,11 @@ public class GameController : MonoBehaviour {
 		Artifact artifactObject = (Artifact)artifact;
 
 		inventory.AddArtifact(artifactObject);
+
+		// WHITE KEYS RESETS THE GAME
+		if(artifactObject.GetArtifactObject() == ArtifactObject.ArtifactWhiteKey) {
+			level.RestartLevel();
+		}
 	}
 
 	// PLAYER GUI INTERACTION
