@@ -54,7 +54,6 @@
      <Compile Include="Assets\Scripts\LevelController.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <None Include="Assets\Levels\Easy.xml" />
-     <None Include="Assets\Levels\Hard.xml" />
      <None Include="Assets\Levels\Medium.xml" />
      <None Include="Assets\Data\GameSave.xml" />
  <Reference Include="Assembly-UnityScript-firstpass">

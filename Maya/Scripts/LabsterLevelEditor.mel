@@ -1,11 +1,14 @@
+/*
+    WALL
+*/
 proc CreateWallObject(float $y, float $z, float $rot) {
     
-    select -r wall_object;
+    select -r GameObjects:wall_object;
     string $obj[] = `duplicate -rr -un`;
         
-    float $wall_size = `getAttr cc_attributes.wallSize`;
+    float $wall_size = `getAttr GameObjects:cc_attributes.wallSize`;
         
-    scale -r 1 1 $z ;
+    scale -r $wall_size $y $z ;
     
     setAttr ($obj[0]+".rotateY") $rot;
     
@@ -33,9 +36,45 @@ proc PresetWall(float $y, float $z, float $rot) {
     CreateWallObject($y, $z, $rot);
 }
 
+/*
+    BLOCK
+*/
+proc CreateBlockObject(int $x, int $y, int $z) {
+    
+    select -r GameObjects:block_object;
+    string $obj[] = `duplicate -rr -un`;
+                
+    scale -r $x $y $z ;
+        
+    $parentObject = "Grp_Block";
+    
+    // parent created object inside parent object
+    select $obj[0];
+    select -add $parentObject;
+    parent;
+    
+    // rename current object to type name
+    rename $obj[0] "Block";
 
+}
+
+proc PresetBlock(int $x, int $y, int $z) {
+    CreateBlockObject($x, $y, $z);
+}
+
+proc CreateBlockForm() {
+    float $x = `floatField -q -v leveled_blocksize_x`;
+    float $y = `floatField -q -v leveled_blocksize_y`;
+    float $z = `floatField -q -v leveled_blocksize_z`;
+    
+    CreateBlockObject($x, $y, $z);
+}
+
+/*
+    DOOR
+*/
 proc CreateDoor() {
-    select -r door_object;
+    select -r GameObjects:door_object;
     string $obj[] = `duplicate -rr -un`;
         
     $parentObject = "Grp_Door";
@@ -49,8 +88,11 @@ proc CreateDoor() {
     rename $obj[0] "Door";
 }
 
+/*
+    ARTIFACT
+*/
 proc CreateArtifact() {
-    select -r artifact_object;
+    select -r GameObjects:artifact_object;
     string $obj[] = `duplicate -rr -un`;
         
     $parentObject = "Grp_Artifact";
@@ -61,7 +103,13 @@ proc CreateArtifact() {
     parent;
     
     // rename current object to type name
-    rename $obj[0] "Artifact";
+   
+     rename $obj[0] "Artifact";
+}
+
+// HELPER FUNCTION TO ROUND OFF FLOAT VALUES
+global proc float roundoff(float $value,int $precision) {
+    return (trunc($value*`pow 10 $precision`+0.5)/`pow 10 $precision`);
 }
 
 // HELPER FUNCTION TO GET OBJECTS TRANSFORM INFORMATION (TRANSLATE, SCALE, ROTATE)
@@ -76,13 +124,10 @@ proc float[] GetObejctTransformInfo(string $obj, string $transform) {
     return $xyz;
 }
 
-
-// HELPER FUNCTION TO ROUND OFF FLOAT VALUES
-global proc float roundoff(float $value,int $precision) {
-    return (trunc($value*`pow 10 $precision`+0.5)/`pow 10 $precision`);
-}
-
-proc ExportLevel() {
+/*
+    LABSTER EXPORT XML LEVEL
+*/
+proc LabsterExportXmlLevel() {
     
     string $filePath = `textField -q -tx leveled_levelfile`;
     
@@ -91,8 +136,8 @@ proc ExportLevel() {
     // create level node
     fprint $fileId "<level>\n";
     
-    float $groundScaleX = `getAttr "ground.scaleX"`;
-    float $groundScaleY = `getAttr "ground.scaleY"`;
+    //float $groundScaleX = `getAttr "ground.scaleX"`;
+    //float $groundScaleY = `getAttr "ground.scaleY"`;
     
     // create ground
     fprint $fileId ("<ground><scale>80,1,80</scale><position>0,0,0</position></ground>\n");
@@ -100,10 +145,7 @@ proc ExportLevel() {
     // CREATE WALLS
     select Grp_Wall;
     string $wallNodes[] = `ls -sl -tr -dag`;
-    
-    
-    //fprint $fileId ("<walls>");
-    
+        
     for($wall in $wallNodes) {
         // IGNORE FIRST
         if($wall == "Grp_Wall") {
@@ -121,12 +163,31 @@ proc ExportLevel() {
         fprint $fileId ("</wall>\n");
     }
     
+     // CREATE BLOCKS
+    select Grp_Block;
+    string $blockNodes[] = `ls -sl -tr -dag`;
+        
+    for($block in $blockNodes) {
+        // IGNORE FIRST
+        if($block == "Grp_Block") {
+            continue;
+        }
+        
+        float $scale[] = GetObejctTransformInfo($block, "scale");
+        float $translate[] = GetObejctTransformInfo($block, "translate");
+        float $rotate[] = GetObejctTransformInfo($block, "rotate");
+        
+        fprint $fileId ("<block>");
+        fprint $fileId ("<position>"+$translate[0]+","+$translate[1]+","+$translate[2]+"</position>");
+        fprint $fileId ("<rotation>"+$rotate[0]+","+$rotate[1]+","+$rotate[2]+"</rotation>");
+        fprint $fileId ("<scale>"+$scale[0]+","+$scale[1]+","+$scale[2]+"</scale>");
+        fprint $fileId ("</block>\n");
+    }
+    
     // CREATE DOORS
     select Grp_Door;
     string $doorNodes[] = `ls -sl -tr -dag`;
-    
-    //fprint $fileId ("<doors>");
-    
+        
     for($door in $doorNodes) {
         // IGNORE FIRST
         if($door == "Grp_Door") {
@@ -146,15 +207,11 @@ proc ExportLevel() {
         fprint $fileId ("<scale>"+$scale[0]+","+$scale[1]+","+$scale[2]+"</scale>");
         fprint $fileId ("</door>\n");
     }
-    
-    //fprint $fileId ("</doors>");
-    
+        
      // CREATE ARTIFACTS
     select Grp_Artifact;
     string $artifactNodes[] = `ls -sl -tr -dag`;
-    
-    //fprint $fileId ("<artifacts>");
-    
+        
     for($artifact in $artifactNodes) {
         // IGNORE FIRST
         if($artifact == "Grp_Artifact") {
@@ -174,9 +231,7 @@ proc ExportLevel() {
         fprint $fileId ("<scale>"+$scale[0]+","+$scale[1]+","+$scale[2]+"</scale>");
         fprint $fileId ("</artifact>\n");
     }
-    
-    //fprint $fileId ("</artifacts>");
-    
+        
   
     // end level node
     fprint $fileId "</level>";
@@ -185,7 +240,10 @@ proc ExportLevel() {
     fclose $fileId ;
 }
 
-global proc LevelEditor() {
+/*
+    LABSTER LEVEL EDITOR
+*/
+global proc LabsterLevelEditor() {
     string $level_editor_win = "LEVEL_EDITOR_WIN";
     
     if(`window -exists $level_editor_win`) {
@@ -199,26 +257,40 @@ global proc LevelEditor() {
             
             columnLayout -rowSpacing 12;
                 rowLayout -nc 6 -cw6 120 70 70 60 70 30;
-                    text -label "Create Wall Z/Y";
-                    floatField -precision 0 leveled_wallsize_z;
+                    text -label "Create Wall Y/Z";
                     floatField -value 1 -precision 0 leveled_wallsize_y;
+                    floatField -precision 0 leveled_wallsize_z;
                     text -label "rotation";
                     floatField -precision 0 leveled_wallsize_rot;
                     button -label "Create" -c "CreateWallForm";
                 setParent ..;
+                
                 
                 rowLayout -nc 4 -cw4 120 80 80 80 ;
                     text -label "Wall Presets";
                     button -label "10x Wall" -c "PresetWall(1, 10, 0)";
                     button -label "4x Wall" -c "PresetWall(1, 4, 0)";
                     button -label "1x Wall" -c "PresetWall(1, 1, 0)";
-                    
+                setParent ..;
+                
+                 rowLayout -nc 5 -cw5 120 70 70 60 70;
+                    text -label "Create Block X/Y/Z";
+                    floatField -precision 0 leveled_blocksize_x;
+                    floatField -precision 0 leveled_blocksize_y;
+                    floatField -precision 0 leveled_blocksize_z;
+                    button -label "Create" -c "CreateBlockForm";
+                setParent ..;
+                
+                rowLayout -nc 4 -cw4 120 80 80 80 ;
+                    text -label "Wall Presets";
+                    button -label "1x1 Block" -c "PresetBlock(1, 1, 1)";
+                    button -label "1x2 Block" -c "PresetBlock(1, 2, 1)";
+                    button -label "2x2 Block" -c "PresetBlock(2, 2, 2)";
                 setParent ..;
                 
                 rowLayout -nc 2 -cw2 90 90;
                     button -label "Create Door" -c "CreateDoor";
                     button -label "Create Artifact" -c "CreateArtifact";
-                    
                 setParent ..;                
                 
                 rowLayout -nc 2 -cw2 80 220;
@@ -227,10 +299,8 @@ global proc LevelEditor() {
                     
                 setParent ..;
                 
-                button -label "Export level" -c "ExportLevel";
+                button -label "Export level" -c "LabsterExportXmlLevel";
             
     
     showWindow;
 }
-
-LevelEditor();

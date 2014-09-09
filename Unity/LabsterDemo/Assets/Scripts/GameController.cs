@@ -19,7 +19,8 @@ public enum ArtifactObject {
 	ArtifactNull,
 	ArtifactRedKey,
 	ArtifactBlueKey,
-	ArtifactGreenKey
+	ArtifactGreenKey,
+	ArtifactWhiteKey
 }
 
 // TAGS
@@ -29,7 +30,8 @@ public enum TagObject {
 	TagGround,
 	TagWall,
 	TagDoor,
-	TagArtifact
+	TagArtifact,
+	TagBlock
 }
 
 public class GameController : MonoBehaviour {
@@ -80,23 +82,30 @@ public class GameController : MonoBehaviour {
 				Physics.Raycast(Camera.main.transform.position, ray.direction, out hit, 1000);
 
 				// GET TAG
-				string hitTag = hit.collider.gameObject.tag;
-				lastSelectedObjectTag = GameController.GetTagObjectFromString(hitTag);
+				//string hitTag = hit.collider.gameObject.tag;
+				//lastSelectedObjectTag = GameController.GetTagObjectFromString(hitTag);
 
 				// SET PLAYER POSITION UNLESS CLICKED ON A WALL
-				if(lastSelectedObjectTag != TagObject.TagWall && !guiInteraction) {
+				//if(lastSelectedObjectTag != TagObject.TagWall && !guiInteraction) {
 					Vector3 hitPoint = hit.point;
 					hitPoint.y = 0f;
 
 					player.SetTargetPosition(hitPoint);
-				}
+				//}
 			}
 
 		}
 	}
 
-	public void PlayerHasCollisions(Collider collider) {
+
+
+	public void PlayerHasCollisions(ControllerColliderHit collider) {
 		string tag = collider.gameObject.tag;
+
+		// IGNORE GROUND
+		if(GetTagObjectFromString(tag) == TagObject.TagGround) {
+			return;
+		}
 
 		TagObject tagObject = GetTagObjectFromString(tag);
 
@@ -174,6 +183,9 @@ public class GameController : MonoBehaviour {
 		case "TagDoor":
 			tagObject = TagObject.TagDoor;
 			break;
+		case "TagBlock":
+			tagObject = TagObject.TagBlock;
+			break;
 		}
 		
 		return tagObject;
@@ -198,6 +210,9 @@ public class GameController : MonoBehaviour {
 			break;
 		case TagObject.TagArtifact:
 			tagObject = "TagArtifact";
+			break;
+		case TagObject.TagBlock:
+			tagObject = "TagBlock";
 			break;
 		}
 		

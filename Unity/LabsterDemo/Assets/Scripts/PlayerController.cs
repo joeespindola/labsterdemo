@@ -120,9 +120,13 @@ public class PlayerController : MonoBehaviour
 
 	}
 
+	void OnControllerColliderHit(ControllerColliderHit hit) {
+		gameController.PlayerHasCollisions(hit);
+	}
+
 	// COLLISION TRIGGER FROM PLAYER DELEGATES COLLISION TO GAME CONTROLLER
 	void OnTriggerEnter(Collider other) {
-		gameController.PlayerHasCollisions(other);
+		//gameController.PlayerHasCollisions(other);
 	}
 
 }

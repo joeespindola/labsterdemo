@@ -9,11 +9,12 @@ public class InventoryController : MonoBehaviour {
 	public Texture inventoryRedKeyTexture;
 	public Texture inventoryGreenKeyTexture;
 	public Texture inventoryBlueKeyTexture;
+	public Texture inventoryWhiteKeyTexture;
 
-	private List<Artifact> artifactIventoryList;
+	private List<Artifact> artifactIventoryList = new List<Artifact>();
 
 	void Start() {
-		artifactIventoryList = new List<Artifact>();
+
 	}
 
 	public void AddArtifact(Artifact artifact) {
@@ -56,6 +57,9 @@ public class InventoryController : MonoBehaviour {
 			}
 			if(obj.GetArtifactObject() == ArtifactObject.ArtifactBlueKey) {
 				GUI.DrawTexture(new Rect(xPos+offsetInventory.x, offsetInventory.y, 38, 38), inventoryBlueKeyTexture);
+			}
+			if(obj.GetArtifactObject() == ArtifactObject.ArtifactWhiteKey) {
+				GUI.DrawTexture(new Rect(xPos+offsetInventory.x, offsetInventory.y, 38, 38), inventoryWhiteKeyTexture);
 			}
 
 			xPos += xDist;
