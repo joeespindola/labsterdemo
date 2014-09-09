@@ -57,7 +57,7 @@ public class GameController : MonoBehaviour {
 	
 	void Start () {
 
-		// LOAD THE LEVEL MEDIUM
+		// LOAD THE LEVEL EASY
 		level.LoadLevel(LevelDificulty.Easy);
 
 	}
