@@ -498,7 +498,9 @@ MonoBehaviour:
   gameLevelDoorList: []
   gameLevelArtifactList: []
   levelRootObject: {fileID: 79931354}
-  LevelAsset: {fileID: 4900000, guid: 790462e36168649ff872f00b8a0cbe0a, type: 3}
+  easyLevelData: {fileID: 4900000, guid: b91a1542bf2a044e9955b621059a563c, type: 3}
+  mediumLevelData: {fileID: 4900000, guid: 790462e36168649ff872f00b8a0cbe0a, type: 3}
+  hardLevelData: {fileID: 4900000, guid: 8bb215814804c4c6fb8846d980364367, type: 3}
 --- !u!1 &1448885630
 GameObject:
   m_ObjectHideFlags: 0

@@ -34,6 +34,14 @@ public enum TagObject {
 	TagBlock
 }
 
+// LEVEL DIFICULTY
+public enum LevelDificulty {
+	Null,
+	Easy,
+	Medium,
+	Hard
+}
+
 public class GameController : MonoBehaviour {
 	public PlayerController player;
 	public InputController input;
@@ -49,8 +57,8 @@ public class GameController : MonoBehaviour {
 	
 	void Start () {
 
-		// LOAD THE LEVEL
-		level.LoadLevel();
+		// LOAD THE LEVEL MEDIUM
+		level.LoadLevel(LevelDificulty.Easy);
 
 	}
 	
@@ -140,24 +148,67 @@ public class GameController : MonoBehaviour {
 
 		inventory.AddArtifact(artifactObject);
 
-		// WHITE KEYS RESETS THE GAME
+		// WHITE KEYS CYCLES THE LEVELS
 		if(artifactObject.GetArtifactObject() == ArtifactObject.ArtifactWhiteKey) {
-			level.RestartLevel();
+
+			if(level.GetCurrentLevelDificulty() == LevelDificulty.Hard) {
+				// LOAD EASY LEVEL
+				level.LoadLevel(LevelDificulty.Easy);
+			}
+			else if(level.GetCurrentLevelDificulty() == LevelDificulty.Easy) {
+				// LOAD MEDIUM LEVEL
+				level.LoadLevel(LevelDificulty.Medium);
+			}
+			else if(level.GetCurrentLevelDificulty() == LevelDificulty.Medium) {
+				// LOAD HARD LEVEL
+				level.LoadLevel(LevelDificulty.Hard);
+			}
+
 		}
 	}
 
 	// PLAYER GUI INTERACTION
 	public void OnGUI() {
-		if (GUI.Button(new Rect(10, 20, 110, 30), "Save Game")) {
-			level.SaveGame();
+
+		// NO SAVING AND LOADING FROM WEBPLAYER
+		// CANNOT WRITE/READ FILES
+		if( Application.platform != RuntimePlatform.OSXWebPlayer && Application.platform != RuntimePlatform.WindowsWebPlayer ) {
+
+			if (GUI.Button(new Rect(10, 20, 110, 30), "Save Game")) {
+				level.SaveGame();
+			}
+
+			else if (GUI.Button(new Rect(10, 55, 110, 30), "Load Game")) {
+				level.StartCoroutine("LoadGame");
+			}
+
 		}
 
-		else if (GUI.Button(new Rect(10, 55, 110, 30), "Load Game")) {
-			level.LoadGame();
-		}
-
-		else if (GUI.Button(new Rect(10, 91, 110, 30), "Restart Game")) {
+		if (GUI.Button(new Rect(10, 91, 110, 30), "Restart Level")) {
 			level.RestartLevel();
+		}
+
+		GUI.Label (new Rect(20, 130, 110, 30), "Load level");
+
+		if (GUI.Button(new Rect(10, 160, 50, 30), "Easy")) {
+			level.LoadLevel(LevelDificulty.Easy);
+		}
+
+		else if (GUI.Button(new Rect(70, 160, 50, 30), "Medium")) {
+			level.LoadLevel(LevelDificulty.Medium);
+		}
+
+		else if (GUI.Button(new Rect(130, 160, 50, 30), "Hard")) {
+			level.LoadLevel(LevelDificulty.Hard);
+		}
+
+		// NO QUITTING APPLICATION ON WEBPLAYERS
+		if( Application.platform != RuntimePlatform.OSXWebPlayer && Application.platform != RuntimePlatform.WindowsWebPlayer ) {
+
+			if (GUI.Button(new Rect(10, 200, 120, 30), "Quit Apllication")) {
+				Application.Quit();
+			}
+
 		}
 
 	}
@@ -216,5 +267,43 @@ public class GameController : MonoBehaviour {
 		}
 		
 		return tagObject;
+	}
+
+	// CONVERT STRING TO DIFICULTY
+	public static LevelDificulty GetLevelDificultyFromString(string dificulty) {
+		LevelDificulty levelDificulty = LevelDificulty.Null;
+		
+		switch(dificulty) {
+		case "Easy":
+			levelDificulty = LevelDificulty.Easy;
+			break;
+		case "Medium":
+			levelDificulty = LevelDificulty.Medium;
+			break;
+		case "Hard":
+			levelDificulty = LevelDificulty.Hard;
+			break;
+		}
+		
+		return levelDificulty;
+	}
+	
+	// RETURN STRONG FROM TAG OBJECT
+	public static string GetDificultyStringFromLevelDificulty(LevelDificulty dificulty) {
+		string dificultyString = "Null";
+		
+		switch(dificulty) {
+		case LevelDificulty.Easy:
+			dificultyString = "Easy";
+			break;
+		case LevelDificulty.Medium:
+			dificultyString = "Medium";
+			break;
+		case LevelDificulty.Hard:
+			dificultyString = "Hard";
+			break;
+		}
+		
+		return dificultyString;
 	}
 }

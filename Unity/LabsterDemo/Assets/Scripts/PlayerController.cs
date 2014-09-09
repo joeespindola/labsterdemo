@@ -41,6 +41,11 @@ public class PlayerController : MonoBehaviour
 		targetPosition = Vector3.zero;
 	}
 
+	public void HaltPlayer() {
+		playerDirection = Vector3.zero;
+		targetPosition = Vector3.zero;
+	}
+
 	// SET TARGET POSITION
 	public void SetTargetPosition(Vector3 position) {
 		// IF VECTOR3 ZERO STOP PLAYER
@@ -69,10 +74,10 @@ public class PlayerController : MonoBehaviour
 	public void ResetPlayerPosition() {
 		transform.position = new Vector3(0f, 1f, 0f);
 		
-		Quaternion playerRotationQuat = transform.rotation;
+		Quaternion playerRotationQuat = playerRotationNode.rotation;
 		playerRotationQuat.eulerAngles = new Vector3(0f, 0f, 0f);
 		
-		transform.rotation = playerRotationQuat;
+		playerRotationNode.rotation = playerRotationQuat;
 
 		playerDirection = Vector3.zero;
 		lastPlayerDirection = Vector3.zero;

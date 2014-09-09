@@ -19,20 +19,43 @@ public class LevelController : MonoBehaviour {
 	public List<Artifact> gameLevelArtifactList;
 
 	public GameObject levelRootObject;
-	public TextAsset LevelAsset;
+
+	public TextAsset easyLevelData;
+	public TextAsset mediumLevelData;
+	public TextAsset hardLevelData;
+
+	private LevelDificulty currentDificulty;
 
 	void Start () {
 
 
 	}
 
+	public LevelDificulty GetCurrentLevelDificulty() {
+		return currentDificulty;
+	}
+
 	// LOAD LEVEL XML
-	public void LoadLevel() {
+	public void LoadLevel(LevelDificulty dificulty) {
 
 		XmlDocument xmlDoc = new XmlDocument(); 
-		xmlDoc.LoadXml(LevelAsset.text);
 
+		if(dificulty == LevelDificulty.Easy) {
+			xmlDoc.LoadXml(easyLevelData.text);
+		}
+		else if(dificulty == LevelDificulty.Medium) {
+			xmlDoc.LoadXml(mediumLevelData.text);
+		}
+		else if(dificulty == LevelDificulty.Hard) {
+			xmlDoc.LoadXml(hardLevelData.text);
+		}
+
+		currentDificulty = dificulty;
+		
 		XmlNodeList levelsList = xmlDoc.GetElementsByTagName("level");
+
+		// CLEAR PRIOR LEVEL IF EXISTS
+		ClearLevel ();
 
 		// CREATE DOOR LIST
 		gameLevelDoorList = new List<Door>();
@@ -42,6 +65,7 @@ public class LevelController : MonoBehaviour {
 
 		// RESET PLAYER POSITION
 		gameController.player.ResetPlayerPosition();
+		gameController.player.HaltPlayer();
 
 		// CLEAR PLAYER INVENTORY
 		gameController.inventory.ClearInventory();
@@ -209,119 +233,123 @@ public class LevelController : MonoBehaviour {
 
 	public void RestartLevel() {
 		ClearLevel ();
-		LoadLevel ();
+
+		// RESTART THE LEVEL WITH CURRENT DIFICULTY
+		LoadLevel(currentDificulty);
 	}
 
 	// SAVE GAME
 	public void SaveGame() {
-		string filepath = Application.dataPath + @"/Data/GameSave.xml";
+		string filepath = Directory.GetCurrentDirectory() + @"/GameSave.xml";
+
 		XmlDocument xmlDoc = new XmlDocument();
 
-		// CHECK IF FILE EXISTS
-		if(File.Exists(filepath))
-		{
-			xmlDoc.Load(filepath);
 			
-			XmlElement elmRoot = xmlDoc.DocumentElement;
-			
-			elmRoot.RemoveAll();
+		XmlElement root = xmlDoc.CreateElement("save");
+		xmlDoc.AppendChild(root);
 
-			// PLAYER
-			XmlElement playerElement = xmlDoc.CreateElement("player");
-
-			// PLAYER POSITION
-			XmlElement positionNode = xmlDoc.CreateElement("position");
-
-			Vector3 playerPosition = gameController.player.transform.position;
-			positionNode.InnerText = (System.Math.Round(playerPosition.x,3)+","+System.Math.Round(playerPosition.y,3)+","+System.Math.Round(playerPosition.z,3));
-			
-			playerElement.AppendChild(positionNode);
-
-			// PLAYER ROTATION
-			XmlElement rotationNode = xmlDoc.CreateElement("rotation");
-			
-			Vector3 rotationVector = gameController.player.transform.rotation.eulerAngles;
-			rotationNode.InnerText = (System.Math.Round(rotationVector.x,3)+","+System.Math.Round(rotationVector.y,3)+","+System.Math.Round(rotationVector.z,3));
-			
+		root.SetAttribute("dificulty", GameController.GetDificultyStringFromLevelDificulty(currentDificulty) );
+		
+		// PLAYER
+		XmlElement playerElement = xmlDoc.CreateElement("player");
+		
+		// PLAYER POSITION
+		XmlElement positionNode = xmlDoc.CreateElement("position");
+		
+		Vector3 playerPosition = gameController.player.transform.position;
+		positionNode.InnerText = (System.Math.Round(playerPosition.x,3)+","+System.Math.Round(playerPosition.y,3)+","+System.Math.Round(playerPosition.z,3));
+		
+		playerElement.AppendChild(positionNode);
+		
+		// PLAYER ROTATION
+		XmlElement rotationNode = xmlDoc.CreateElement("rotation");
+		
+		Vector3 rotationVector = gameController.player.playerRotationNode.rotation.eulerAngles;
+		rotationNode.InnerText = (System.Math.Round(rotationVector.x,3)+","+System.Math.Round(rotationVector.y,3)+","+System.Math.Round(rotationVector.z,3));
+		
 			playerElement.AppendChild(rotationNode);
-
-			elmRoot.AppendChild(playerElement);
-
-			// DOORS
-			XmlElement doorsElement = xmlDoc.CreateElement("doors");
-
-			foreach(Door door in gameLevelDoorList) {
-				XmlElement doorElement = xmlDoc.CreateElement("door");
-				doorElement.SetAttribute("id", door.id.ToString());
-
-				doorElement.InnerText = (door.IsOpened().ToString());
-
-				doorsElement.AppendChild(doorElement);
-			}
-
-			elmRoot.AppendChild(doorsElement);
-
-			// ARTIFACTS
-			XmlElement artifactsElement = xmlDoc.CreateElement("artifacts");
 			
-			foreach(Artifact artifact in gameLevelArtifactList) {
-				XmlElement artifactElement = xmlDoc.CreateElement("artifact");
-				artifactElement.SetAttribute("id", artifact.id.ToString());
-				
-				artifactElement.InnerText = (artifact.IsArtifactCollected().ToString());
-				
-				artifactsElement.AppendChild(artifactElement);
-			}
+		root.AppendChild(playerElement);
 			
-			elmRoot.AppendChild(artifactsElement);
-
-			// CAMERA
-			XmlElement cameraElement = xmlDoc.CreateElement("camera");
-
-			XmlElement cameraPositionElement = xmlDoc.CreateElement("position");
-			Vector3 cameraPosition = gameController.camera.transform.position;
-
-			cameraPositionElement.InnerText = (cameraPosition.x+","+cameraPosition.y+","+cameraPosition.z);
-
-			XmlElement cameraRotationElement = xmlDoc.CreateElement("rotation");
-			Vector3 cameraRotation = gameController.camera.transform.rotation.eulerAngles;
-
-			cameraRotationElement.InnerText = (System.Math.Round(cameraRotation.x,3)+","+System.Math.Round(cameraRotation.y,3)+","+System.Math.Round(cameraRotation.z,3));
-
-			cameraElement.AppendChild(cameraPositionElement);
-			cameraElement.AppendChild(cameraRotationElement);
-							
-			elmRoot.AppendChild(cameraElement);
-
-			xmlDoc.Save(filepath);
+		// DOORS
+		XmlElement doorsElement = xmlDoc.CreateElement("doors");
+		
+		foreach(Door door in gameLevelDoorList) {
+			XmlElement doorElement = xmlDoc.CreateElement("door");
+			doorElement.SetAttribute("id", door.id.ToString());
+			
+			doorElement.InnerText = (door.IsOpened().ToString());
+			
+			doorsElement.AppendChild(doorElement);
 		}
+			
+		root.AppendChild(doorsElement);
+			
+		// ARTIFACTS
+		XmlElement artifactsElement = xmlDoc.CreateElement("artifacts");
+		
+		foreach(Artifact artifact in gameLevelArtifactList) {
+			XmlElement artifactElement = xmlDoc.CreateElement("artifact");
+			artifactElement.SetAttribute("id", artifact.id.ToString());
+			
+			artifactElement.InnerText = (artifact.IsArtifactCollected().ToString());
+			
+			artifactsElement.AppendChild(artifactElement);
+		}
+			
+		root.AppendChild(artifactsElement);
+			
+		// CAMERA
+		XmlElement cameraElement = xmlDoc.CreateElement("camera");
+		
+		XmlElement cameraPositionElement = xmlDoc.CreateElement("position");
+		Vector3 cameraPosition = gameController.camera.transform.position;
+		
+		cameraPositionElement.InnerText = (cameraPosition.x+","+cameraPosition.y+","+cameraPosition.z);
+		
+		XmlElement cameraRotationElement = xmlDoc.CreateElement("rotation");
+		Vector3 cameraRotation = gameController.camera.transform.rotation.eulerAngles;
+		
+		cameraRotationElement.InnerText = (System.Math.Round(cameraRotation.x,3)+","+System.Math.Round(cameraRotation.y,3)+","+System.Math.Round(cameraRotation.z,3));
+		
+		cameraElement.AppendChild(cameraPositionElement);
+		cameraElement.AppendChild(cameraRotationElement);
+		
+		root.AppendChild(cameraElement);
+			
+		xmlDoc.Save(filepath);
+		//}
 	}
-
+	
 	// LOAD GAME
 	public void LoadGame() {
 		ClearLevel();
+		
+		//string filepath = Application.dataPath + @"/GameSave.xml";
 
-		string filepath = Application.dataPath + @"/Data/GameSave.xml";
+		string filepath = Directory.GetCurrentDirectory() + @"/GameSave.xml";
+
 		XmlDocument xmlDoc = new XmlDocument();
 
-		
 		// CHECK IF FILE EXISTS
 		if(File.Exists(filepath))
 		{
 			xmlDoc.Load(filepath);
-
+			
 			// DESTROY LEVEL CHILDRENS
 			ClearLevel();
 
-			// LOAD LEVEL AGAIN
-			LoadLevel();
-
+			string dificultyValue = (string)xmlDoc.FirstChild.Attributes["dificulty"].Value;
+			
+			// LOAD LEVEL
+			LoadLevel( GameController.GetLevelDificultyFromString(dificultyValue) );
+			
 			// CLEARS INVENTORY LIST
 			gameController.inventory.ClearInventory();
-
+			
 			// SET PLAYER POSITION AND ROTATION
 			XmlNode playerNode = xmlDoc.DocumentElement.GetElementsByTagName("player")[0];
-
+			
 			foreach(XmlNode playerInfoNode in playerNode.ChildNodes) {
 				if(playerInfoNode.Name == "position") {
 					string playerPositionString = playerInfoNode.InnerText;
@@ -332,43 +360,43 @@ public class LevelController : MonoBehaviour {
 				if(playerInfoNode.Name == "rotation") {
 					string playerRotationString = playerInfoNode.InnerText;
 					
-					Quaternion playerRotationQuat = gameController.player.transform.rotation;
+					Quaternion playerRotationQuat = gameController.player.playerRotationNode.rotation;
 					playerRotationQuat.eulerAngles = DeserializeVectorString(playerRotationString);
 					
-					gameController.player.transform.rotation = playerRotationQuat;
+					gameController.player.playerRotationNode.rotation = playerRotationQuat;
 				}
 			}
-
+			
 			// SET CAMERA POSITION AND ROTATION
 			XmlNode cameraNode = xmlDoc.DocumentElement.GetElementsByTagName("camera")[0];
-
+			
 			foreach(XmlNode camInfoNode in cameraNode.ChildNodes) {
 				if(camInfoNode.Name == "position") {
 					string cameraPositionString = camInfoNode.InnerText;
-
+					
 					gameController.camera.transform.position = DeserializeVectorString(cameraPositionString);
 				}
-
+				
 				if(camInfoNode.Name == "rotation") {
 					string cameraRotationString = camInfoNode.InnerText;
-
+					
 					Quaternion cameraRotationQuat = gameController.camera.transform.rotation;
 					cameraRotationQuat.eulerAngles = DeserializeVectorString(cameraRotationString);
-
+					
 					gameController.camera.transform.rotation = cameraRotationQuat;
 				}
 			}
-
+			
 			// SET DOOR STATES
-
+			
 			XmlNode doorsNode = xmlDoc.DocumentElement.GetElementsByTagName("doors")[0];
 			
 			foreach(XmlNode doorInfoNode in doorsNode.ChildNodes) {
 				if(doorInfoNode.Name == "door") {
 					string doorStateValue = doorInfoNode.InnerText;
-
+					
 					int id = int.Parse( doorInfoNode.Attributes["id"].Value );
-
+					
 					// CHECK IF DOOR ID IS THE SAME
 					foreach(Door door in gameLevelDoorList) {
 						if(door.id == id && doorStateValue == "True") {
@@ -377,10 +405,10 @@ public class LevelController : MonoBehaviour {
 						}
 					}
 				}
-
+				
 			}
-
-
+			
+			
 			// SET ARTIFACTS STATES
 			XmlNode artifactsNode = xmlDoc.DocumentElement.GetElementsByTagName("artifacts")[0];
 			
@@ -389,7 +417,7 @@ public class LevelController : MonoBehaviour {
 					string artifactStateValue = artifactInfoNode.InnerText;
 					
 					int id = int.Parse( artifactInfoNode.Attributes["id"].Value );
-				
+					
 					// CHECK IF DOOR ID IS THE SAME
 					foreach(Artifact artifact in gameLevelArtifactList) {
 						if(artifact.id == id && artifactStateValue == "True") {
@@ -400,10 +428,10 @@ public class LevelController : MonoBehaviour {
 				}
 				
 			}
-
-
+			
+			
 		}
-
+		
 	}
 
 }
