@@ -17,10 +17,10 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - time: 0
-        value: {x: 0, y: 3, z: 0}
+        value: {x: 0, y: -2.5, z: 0}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
-        tangentMode: 0
+        tangentMode: 164634640
       m_PreInfinity: 2
       m_PostInfinity: 2
     path: door_object
@@ -97,7 +97,7 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - time: 0
-        value: 3
+        value: -2.5
         inSlope: 0
         outSlope: 0
         tangentMode: 10

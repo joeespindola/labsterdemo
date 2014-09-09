@@ -37,13 +37,14 @@ public class Door : MonoBehaviour {
 	public void OpenDoor() {
 		isOpened = true;
 		doorAnimator.SetBool("door_opened", isOpened);
+		GetComponent<BoxCollider>().enabled = false;
 	}
 
 	// WARP DOOR
 	public void WarpDoor() {
 		wrapDoor = true;
 		isOpened = true;
-
+		GetComponent<BoxCollider>().enabled = false;
 
 		doorAnimator.SetBool("wrap_door", wrapDoor);
 	}

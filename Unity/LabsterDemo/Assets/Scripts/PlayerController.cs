@@ -22,7 +22,13 @@ public class PlayerController : MonoBehaviour
 	private Vector3 playerDirection;
 	private Vector3 lastPlayerDirection;
 
-	public Transform playerLookAt;
+	public Transform playerRotationNode;
+
+	public float RotationSpeed = 2.0f;
+
+	//values for internal use
+	private Quaternion _lookRotation;
+	private Vector3 _direction;
 	
 	void Start ()
 	{
@@ -104,9 +110,26 @@ public class PlayerController : MonoBehaviour
 		playerDirection *= moveSpeed * Time.deltaTime;
 		
 		playerDirection.y = -gravity * Time.deltaTime;
+
+		if(targetPosition != Vector3.zero) {
+			// ROTATE CHARACTER
+			_direction = (targetPosition - transform.position).normalized;
+			
+			//create the rotation we need to be in to look at the target
+			_lookRotation = Quaternion.LookRotation(_direction);
+
+			Vector3 eulerRotation = _lookRotation.eulerAngles;
+			eulerRotation.x = 0f;
+			eulerRotation.z = 0f;
+
+			_lookRotation.eulerAngles = eulerRotation;
+			
+			//rotate us over time according to speed until we are in the required rotation
+
 		
-		if(playerDirection.magnitude > 0) playerLookAt.LookAt(transform.position + (lastPlayerDirection));
-		
+			if(playerDirection.magnitude > 0.1f) playerRotationNode.rotation = Quaternion.Slerp(playerRotationNode.rotation, _lookRotation, Time.deltaTime * RotationSpeed);
+		}
+
 		playerCharacterController.Move(playerDirection);
 
 		// AVOID WEIRD ROTATIONS WHEN INTERFACTING WITH OTHER PHYSICS OBJECTS
@@ -124,10 +147,6 @@ public class PlayerController : MonoBehaviour
 		gameController.PlayerHasCollisions(hit);
 	}
 
-	// COLLISION TRIGGER FROM PLAYER DELEGATES COLLISION TO GAME CONTROLLER
-	void OnTriggerEnter(Collider other) {
-		//gameController.PlayerHasCollisions(other);
-	}
 
 }
 

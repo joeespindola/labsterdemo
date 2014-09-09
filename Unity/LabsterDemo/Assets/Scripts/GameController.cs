@@ -79,10 +79,11 @@ public class GameController : MonoBehaviour {
 
 			if(Input.GetMouseButtonDown (0) && GUIUtility.hotControl == 0) {
 				// RAYCAST TO POSITION
-				Physics.Raycast(Camera.main.transform.position, ray.direction, out hit, 1000);
+				Physics.Raycast(Camera.main.transform.position, ray.direction, out hit, 2000);
 
 				// GET TAG
-				//string hitTag = hit.collider.gameObject.tag;
+				string hitTag = hit.collider.gameObject.tag;
+				Debug.Log(hitTag);
 				//lastSelectedObjectTag = GameController.GetTagObjectFromString(hitTag);
 
 				// SET PLAYER POSITION UNLESS CLICKED ON A WALL
